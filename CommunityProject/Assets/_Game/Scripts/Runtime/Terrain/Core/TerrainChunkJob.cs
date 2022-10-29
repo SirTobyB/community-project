@@ -14,10 +14,10 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 	public struct TerrainChunkJob : IJob, IDisposable
 	{
 		[ReadOnly]
-		private Grid _grid;
+		private readonly Grid _grid;
 
 		[ReadOnly]
-		private int2 _position;
+		private readonly int2 _position;
 
 		[NativeDisableContainerSafetyRestriction]
 		private NativeArray<StreamVertex> _stream;
@@ -26,7 +26,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		private NativeArray<ushort> _triangles;
 
 		[ReadOnly]
-		private IntBounds _bounds;
+		private readonly IntBounds _bounds;
 
 		[ReadOnly]
 		private NativeArray<float3> _offsets;
