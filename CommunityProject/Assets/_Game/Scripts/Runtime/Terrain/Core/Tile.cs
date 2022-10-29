@@ -17,6 +17,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		public int2 Position { get; }
 		public float3 BottomCenter { get; }
 
+		public float Center => GetCenter(GetData());
+
 		public Tile(Grid grid, int2 position)
 		{
 			_grid = grid;
@@ -25,5 +27,25 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		}
 
 		internal readonly TileData GetData() => _grid.GetTileData(Position);
+
+		internal float GetCenter(TileData data)
+		{
+			var lowestPoint = data.GetLowestPoint();
+			float center = lowestPoint;
+
+			// One corner is below all other corners
+			if (data.GetCornerCountAtHeight(lowestPoint) == 1)
+			{
+				center++;
+			}
+
+			if (data.IsSlope)
+			{
+				center += 0.5f;
+			}
+
+			return center;
+		}
 	}
 }
+

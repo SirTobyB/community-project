@@ -19,11 +19,11 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		/// <summary>
 		/// Height maximum height of the grid
 		/// </summary>
-		public readonly Height MaxHeight;
+		public readonly byte MaxHeight;
 
 		private NativeArray<TileData> _tiles;
 
-		public Grid(int length, int width, Height maxHeight, Allocator allocator)
+		public Grid(int length, int width, byte maxHeight, Allocator allocator)
 		{
 			Length = length;
 			Width = width;
@@ -35,11 +35,11 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 
 		private void GenerateDefaultTiles()
 		{
-			var defaultHeight = MaxHeight / 2;
+			var defaultHeight = (byte) (MaxHeight / 2);
 
 			for (var i = 0; i < _tiles.Length; i++)
 			{
-				_tiles[0] = new(defaultHeight);
+				_tiles[i] = new(defaultHeight);
 			}
 		}
 

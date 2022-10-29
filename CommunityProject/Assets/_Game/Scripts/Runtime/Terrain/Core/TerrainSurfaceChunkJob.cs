@@ -28,6 +28,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		[ReadOnly]
 		private readonly IntBounds _bounds;
 
+		private readonly float _heightStep;
+
 		[ReadOnly]
 		private NativeArray<float3> _offsets;
 
@@ -43,12 +45,14 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 			Mesh.MeshData meshData,
 			Grid grid,
 			int2 position,
-			IntBounds bounds
+			IntBounds bounds,
+			float heightStep
 		)
 		{
 			_grid = grid;
 			_position = position;
 			_bounds = bounds;
+			_heightStep = heightStep;
 
 			var descriptor =
 				new NativeArray<VertexAttributeDescriptor>(3, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
@@ -58,13 +62,14 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 			descriptor[2] = new(VertexAttribute.TexCoord0, dimension: 2);
 
 			var tileCount = _bounds.Size.x * _bounds.Size.y;
-			var verticesPerTile = 5;
+
+			const int verticesPerTile = 5;
 			var vertexCount = tileCount * verticesPerTile;
 			meshData.SetVertexBufferParams(vertexCount, descriptor);
 			descriptor.Dispose();
 
-			var trianglesPerTile = 4;
-			var verticesPerTriangle = 3;
+			const int trianglesPerTile = 4;
+			const int verticesPerTriangle = 3;
 			var triangleIndexCount = tileCount * trianglesPerTile * verticesPerTriangle;
 			meshData.SetIndexBufferParams(triangleIndexCount, IndexFormat.UInt16);
 
@@ -91,7 +96,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 			_offsets[3] = Tile.CornerOffsetsFromCenter[3];
 		}
 
-		private float3 GetCornerPosition(float3 bottomCenter, Corner corner) => _offsets[corner.Index] + bottomCenter;
+		private float3 GetCornerPosition(float3 bottomCenter, TileData tileData, Corner corner) =>
+			_offsets[corner.Index] + bottomCenter + new float3(0, tileData.GetHeight(corner) * _heightStep, 0);
 
 		public void Execute()
 		{
@@ -110,14 +116,14 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 
 		private void GenerateTile(int index, ref Tile tile)
 		{
-			var data = tile.GetData();
+			var tileData = tile.GetData();
 			var bottomCenter = tile.BottomCenter;
 
-			var cornerNorthWest = GetCornerPosition(bottomCenter, Corner.NorthWest);
-			var cornerNorthEast = GetCornerPosition(bottomCenter, Corner.NorthEast);
-			var cornerSouthEast = GetCornerPosition(bottomCenter, Corner.SouthEast);
-			var cornerSouthWest = GetCornerPosition(bottomCenter, Corner.SouthWest);
-			var center = bottomCenter;
+			var cornerNorthWest = GetCornerPosition(bottomCenter, tileData, Corner.NorthWest);
+			var cornerNorthEast = GetCornerPosition(bottomCenter, tileData, Corner.NorthEast);
+			var cornerSouthEast = GetCornerPosition(bottomCenter, tileData, Corner.SouthEast);
+			var cornerSouthWest = GetCornerPosition(bottomCenter, tileData, Corner.SouthWest);
+			var center = bottomCenter + new float3(0, tile.Center * _heightStep, 0);
 
 			var vertexOffset = index * 5;
 			var centerVertexIndex = vertexOffset;

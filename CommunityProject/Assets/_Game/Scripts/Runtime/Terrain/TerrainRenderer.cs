@@ -70,7 +70,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 			foreach (var chunk in chunksToUpdate)
 			{
-				 chunkJobPairs.Add(new(chunk, Terrain.Grid));
+				 chunkJobPairs.Add(new(chunk, Terrain.Grid, Terrain.HeightStep));
 			}
 
 			JobHandle.ScheduleBatchedJobs();
@@ -109,12 +109,12 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 			public Chunk Chunk { get; }
 
-			public ChunkJobPair(Chunk chunk, Grid grid)
+			public ChunkJobPair(Chunk chunk, Grid grid, float heightStep)
 			{
 				Chunk = chunk;
 				_meshUpdater = chunk.AcquireMeshUpdater();
 
-				_terrainChunkJob = new(_meshUpdater.MeshData, grid, chunk.Position, chunk.Bounds);
+				_terrainChunkJob = new(_meshUpdater.MeshData, grid, chunk.Position, chunk.Bounds, heightStep);
 				_jobHandle = _terrainChunkJob.Schedule();
 			}
 

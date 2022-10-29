@@ -25,6 +25,10 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		[Min(16)]
 		private int ChunkSize = 16;
 
+		[field:SerializeField]
+		[field:Min(0.5f)]
+		public float HeightStep { get; private set; } = 1;
+
 		[Header("Broadcasting channels")]
 		[SerializeField]
 		private UpdateChunksEventChannelSO UpdateChunksEventChannel;
@@ -35,7 +39,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 		private void Awake()
 		{
-			_grid = new(Length, Width, new(MaxHeight), Allocator.Persistent);
+			_grid = new(Length, Width, MaxHeight, Allocator.Persistent);
 			Chunks = new(new(Length, Width), ChunkSize);
 		}
 
