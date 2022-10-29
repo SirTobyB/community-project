@@ -403,8 +403,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Width: 32
   Length: 32
-  MaxHeight: 5
+  <MaxHeight>k__BackingField: 5
   ChunkSize: 16
+  <HeightStep>k__BackingField: 0.7
   UpdateChunksEventChannel: {fileID: 11400000, guid: 53a59920aba8348e6bee5597db98bd0b,
     type: 2}
 --- !u!114 &1034941417

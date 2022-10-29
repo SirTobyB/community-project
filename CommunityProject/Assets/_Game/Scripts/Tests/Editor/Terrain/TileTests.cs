@@ -1,6 +1,8 @@
 using BoundfoxStudios.CommunityProject.Terrain.Core;
 using FluentAssertions;
 using NUnit.Framework;
+using Unity.Collections;
+using Unity.Mathematics;
 
 namespace BoundfoxStudios.CommunityProject.Tests.Editor.Terrain
 {
@@ -58,6 +60,54 @@ namespace BoundfoxStudios.CommunityProject.Tests.Editor.Terrain
 			result.x.Should().BeApproximately(expectedResultX, epsilon);
 			result.y.Should().BeApproximately(expectedResultY, epsilon);
 			result.z.Should().BeApproximately(expectedResultZ, epsilon);
+		}
+
+		[Test]
+		public void GetNeighborReturnsCorrectValueEvenWithInvalidNeighbors()
+		{
+			var grid = new Grid(2, 2, 1, Allocator.Temp);
+
+			var sut = new Tile(grid, new(0, 0));
+
+			var northNeighbor = sut.GetNeighbor(Direction.North);
+			northNeighbor.Position.x.Should().Be(0);
+			northNeighbor.Position.y.Should().Be(1);
+
+			var eastNeighbor = sut.GetNeighbor(Direction.East);
+			eastNeighbor.Position.x.Should().Be(1);
+			eastNeighbor.Position.y.Should().Be(0);
+
+			var southNeighbor = sut.GetNeighbor(Direction.South);
+			southNeighbor.Position.x.Should().Be(0);
+			southNeighbor.Position.y.Should().Be(-1);
+
+			var westNeighbor = sut.GetNeighbor(Direction.West);
+			westNeighbor.Position.x.Should().Be(-1);
+			westNeighbor.Position.y.Should().Be(0);
+		}
+
+		[Test]
+		public void GetNeighborReturnsCorrectValueEvenWithValidNeighbors()
+		{
+			var grid = new Grid(3, 3, 1, Allocator.Temp);
+
+			var sut = new Tile(grid, new(1, 1));
+
+			var northNeighbor = sut.GetNeighbor(Direction.North);
+			northNeighbor.Position.x.Should().Be(1);
+			northNeighbor.Position.y.Should().Be(2);
+
+			var eastNeighbor = sut.GetNeighbor(Direction.East);
+			eastNeighbor.Position.x.Should().Be(2);
+			eastNeighbor.Position.y.Should().Be(1);
+
+			var southNeighbor = sut.GetNeighbor(Direction.South);
+			southNeighbor.Position.x.Should().Be(1);
+			southNeighbor.Position.y.Should().Be(0);
+
+			var westNeighbor = sut.GetNeighbor(Direction.West);
+			westNeighbor.Position.x.Should().Be(0);
+			westNeighbor.Position.y.Should().Be(1);
 		}
 	}
 }

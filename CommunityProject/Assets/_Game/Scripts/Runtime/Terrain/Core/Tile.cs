@@ -5,9 +5,10 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 {
 	public struct Tile
 	{
-		internal static readonly float3[] CornerOffsetsFromCenter = {
+		internal static readonly float3[] CornerOffsetsFromCenter =
+		{
 			new(-0.5f, 0, 0.5f), // North West
-			new(0.5f, 0, 0.5f),  // North East
+			new(0.5f, 0, 0.5f), // North East
 			new(0.5f, 0, -0.5f), // South East
 			new(-0.5f, 0, -0.5f) // South West
 		};
@@ -46,6 +47,39 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 
 			return center;
 		}
+
+		public Tile GetNeighbor(Direction direction)
+		{
+			var offset = direction.ToVector();
+			var neighborPosition = Position + offset;
+
+			if (!_grid.IsInBounds(neighborPosition))
+			{
+				// This will create an invalid tile which is not part of the grid.
+				return new(_grid, neighborPosition);
+			}
+
+			return _grid.GetTile(neighborPosition);
+		}
+
+		public float3 GetCornerPosition(Corner corner)
+		{
+			return BottomCenter + GetCornerOffset(corner);
+		}
+
+		public float3 GetCornerOffset(Corner corner)
+		{
+			if (!IsInBounds)
+			{
+				return CornerOffsetsFromCenter[corner.Index];
+			}
+
+			var height = GetData().GetHeight(corner);
+			return CornerOffsetsFromCenter[corner.Index] + new float3(0, height, 0);
+		}
+
+		public readonly bool IsInBounds => _grid.IsInBounds(Position);
+		public readonly byte GetHeight(Corner corner) => GetData().GetHeight(corner);
 	}
 }
 

@@ -5,7 +5,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 {
 	public class Chunk
 	{
-		private readonly Mesh _mesh = new();
+		private readonly Mesh _surfaceMesh = new();
+		private readonly Mesh _wallMesh = new();
 
 		public IntBounds Bounds { get; }
 		public int2 Position { get; }
@@ -16,48 +17,21 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 			Bounds = bounds;
 		}
 
-		public TerrainChunkMeshUpdater AcquireMeshUpdater()
+		public ChunkMeshUpdater AcquireMeshUpdater()
 		{
-			return new(_mesh);
+			return new(_surfaceMesh, _wallMesh);
 		}
+
+		public Bounds GetSubMeshBounds(byte maxHeight) =>
+			new(
+				new(Position.x + Bounds.Center.x, (float) maxHeight / 2, Position.y + Bounds.Center.y),
+				new(Bounds.Size.x, maxHeight, Bounds.Size.y)
+			);
 
 		public void Render(Matrix4x4 matrix, Material material, int layer)
 		{
-			for (var i = 0; i < _mesh.subMeshCount; i++)
-			{
-				Graphics.DrawMesh(_mesh, matrix, material, layer, null, i);
-			}
-		}
-
-		void DrawBounds(Bounds b, float delay=0)
-		{
-			// bottom
-			var p1 = new Vector3(b.min.x, b.min.y, b.min.z);
-			var p2 = new Vector3(b.max.x, b.min.y, b.min.z);
-			var p3 = new Vector3(b.max.x, b.min.y, b.max.z);
-			var p4 = new Vector3(b.min.x, b.min.y, b.max.z);
-
-			Debug.DrawLine(p1, p2, Color.blue, delay);
-			Debug.DrawLine(p2, p3, Color.red, delay);
-			Debug.DrawLine(p3, p4, Color.yellow, delay);
-			Debug.DrawLine(p4, p1, Color.magenta, delay);
-
-			// top
-			var p5 = new Vector3(b.min.x, b.max.y, b.min.z);
-			var p6 = new Vector3(b.max.x, b.max.y, b.min.z);
-			var p7 = new Vector3(b.max.x, b.max.y, b.max.z);
-			var p8 = new Vector3(b.min.x, b.max.y, b.max.z);
-
-			Debug.DrawLine(p5, p6, Color.blue, delay);
-			Debug.DrawLine(p6, p7, Color.red, delay);
-			Debug.DrawLine(p7, p8, Color.yellow, delay);
-			Debug.DrawLine(p8, p5, Color.magenta, delay);
-
-			// sides
-			Debug.DrawLine(p1, p5, Color.white, delay);
-			Debug.DrawLine(p2, p6, Color.gray, delay);
-			Debug.DrawLine(p3, p7, Color.green, delay);
-			Debug.DrawLine(p4, p8, Color.cyan, delay);
+			Graphics.DrawMesh(_surfaceMesh, matrix, material, layer);
+			Graphics.DrawMesh(_wallMesh, matrix, material, layer);
 		}
 	}
 }

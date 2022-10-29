@@ -1,6 +1,7 @@
 using System;
 using Unity.Collections;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Core
 {
@@ -22,13 +23,17 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		public readonly byte MaxHeight;
 
 		private NativeArray<TileData> _tiles;
+		private IntBounds _bounds;
 
-		public Grid(int length, int width, byte maxHeight, Allocator allocator)
+		public IntBounds B => _bounds;
+
+		public Grid(int width, int length, byte maxHeight, Allocator allocator)
 		{
-			Length = length;
 			Width = width;
+			Length = length;
 			MaxHeight = maxHeight;
-			_tiles = new(Length * Width, allocator);
+			_tiles = new(Width * Length, allocator);
+			_bounds = new(int2.zero, new(Width, Length));
 
 			GenerateDefaultTiles();
 		}
@@ -49,18 +54,43 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		{
 			if (x < 0 || x >= Width)
 			{
-				throw new ArgumentOutOfRangeException(nameof(x));
+				throw new ArgumentOutOfRangeException(nameof(x), $"{nameof(x)} {x} is less than 0 or greater than {Length}");
 			}
 
 			if (z < 0 || z >= Length)
 			{
-				throw new ArgumentOutOfRangeException(nameof(z));
+				throw new ArgumentOutOfRangeException(nameof(z), $"{nameof(z)} {z} is less than 0 or greater than {Length}");
 			}
 
 			return new(this, new(x, z));
 		}
 
-		internal readonly TileData GetTileData(int2 position) => GetTileData(position.x, position.y);
+		internal readonly TileData GetTileData(int2 position)
+		{
+			var defaultHeight = (byte) (MaxHeight / 2);
+
+			if (position.Equals(new(1,1)))
+			{
+				return new((byte) (defaultHeight + 1), (byte)(defaultHeight + 1), defaultHeight, defaultHeight);
+			}
+
+			if (position.Equals(new(3,1)))
+			{
+				return new((byte) (defaultHeight + 0), (byte)(defaultHeight + 0), (byte) (defaultHeight + 1), (byte) (defaultHeight + 0));
+			}
+
+			if (position.Equals(new(5,1)))
+			{
+				return new((byte) (defaultHeight + 0), (byte)(defaultHeight + 0), (byte) (defaultHeight + 1), (byte) (defaultHeight + 0));
+			}
+
+			if (position.Equals(new(6,0)))
+			{
+				return new((byte) (defaultHeight + 1), (byte)(defaultHeight + 0), (byte) (defaultHeight + 1), (byte) (defaultHeight + 0));
+			}
+
+			return GetTileData(position.x, position.y);
+		}
 
 		internal readonly TileData GetTileData(int x, int z) => _tiles[x + z * Width];
 
@@ -68,5 +98,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		{
 			_tiles.Dispose();
 		}
+
+		public readonly bool IsInBounds(int2 position) => _bounds.Contains(position);
 	}
 }

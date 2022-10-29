@@ -17,9 +17,9 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		[Min(32)]
 		private int Length = 64;
 
-		[SerializeField]
-		[Range(5, 15)]
-		private byte MaxHeight;
+		[field: SerializeField]
+		[field: Range(5, 15)]
+		public byte MaxHeight { get; private set; }
 
 		[SerializeField]
 		[Min(16)]
@@ -39,8 +39,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 		private void Awake()
 		{
-			_grid = new(Length, Width, MaxHeight, Allocator.Persistent);
-			Chunks = new(new(Length, Width), ChunkSize);
+			_grid = new(Width, Length, MaxHeight, Allocator.Persistent);
+			Chunks = new(new(Width, Length), ChunkSize);
 		}
 
 		private void Start()

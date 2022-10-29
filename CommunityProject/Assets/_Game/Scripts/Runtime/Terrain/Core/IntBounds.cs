@@ -37,5 +37,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		public bool Contains(IntBounds other) => math.all(other.Min >= Min) && math.all(other.Max <= Max);*/
 
 		public override string ToString() => $"IntBounds [Min ({Min}) Max({Max})]";
+
+		public readonly bool Contains(int2 position) =>
+			position.x >= _min.x && position.x < _max.x && position.y >= _min.y && position.y < _max.y;
 	}
 }
