@@ -27,7 +27,7 @@ namespace BoundfoxStudios.CommunityProject.Tests.Editor.Terrain
 			bool expectedResult
 		)
 		{
-			var sut = new IntBounds(new(minX, minY), new(maxY, maxY));
+			var sut = new IntBounds(new(minX, minY), new(maxX, maxY));
 
 			sut.Contains(new(positionX, positionY)).Should().Be(expectedResult);
 		}

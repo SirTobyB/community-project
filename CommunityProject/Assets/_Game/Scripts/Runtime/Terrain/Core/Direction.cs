@@ -18,7 +18,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		{
 			if (index > 3)
 			{
-				throw new ArgumentOutOfRangeException(nameof(index), "Must be 0-4");
+				throw new ArgumentOutOfRangeException(nameof(index), "Must be 0-3");
 			}
 
 			Index = index;

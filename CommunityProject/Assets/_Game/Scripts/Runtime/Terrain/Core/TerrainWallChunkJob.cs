@@ -72,21 +72,21 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 			var vertex = new Vertex();
 
 			vertex.Position = _heightStep * tile.GetCornerPosition(corner.NeighborClockwise);
-			vertex.TexCoord0 = new(0, 0);
+			vertex.TexCoord0 = new(0, 1);
 			MeshUpdateData.Vertices.Add(vertex);
 
 			vertex.Position = _heightStep * tile.GetCornerPosition(corner);
-			vertex.TexCoord0 = new(1, 0);
+			vertex.TexCoord0 = new(1, 1);
 			MeshUpdateData.Vertices.Add(vertex);
 
 			if (needsTriangle1 && needsTriangle2)
 			{
 				vertex.Position = _heightStep * neighbor.GetCornerPosition(neighborLeft);
-				vertex.TexCoord0 = new(1, 1);
+				vertex.TexCoord0 = new(1, 0);
 				MeshUpdateData.Vertices.Add(vertex);
 
 				vertex.Position = _heightStep * neighbor.GetCornerPosition(neighborRight);
-				vertex.TexCoord0 = new(0, 1);
+				vertex.TexCoord0 = new(0, 0);
 				MeshUpdateData.Vertices.Add(vertex);
 
 				MeshUpdateData.Triangles.Add(new(vertexIndex, vertexIndex + 1, vertexIndex + 3));
@@ -97,13 +97,13 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 			if (needsTriangle1)
 			{
 				vertex.Position = _heightStep * neighbor.GetCornerPosition(neighborLeft);
-				vertex.TexCoord0 = new(1, 1);
+				vertex.TexCoord0 = new(1, 0);
 				MeshUpdateData.Vertices.Add(vertex);
 			}
 			else
 			{
 				vertex.Position = _heightStep * neighbor.GetCornerPosition(neighborRight);
-				vertex.TexCoord0 = new(0, 1);
+				vertex.TexCoord0 = new(0, 0);
 				MeshUpdateData.Vertices.Add(vertex);
 			}
 
