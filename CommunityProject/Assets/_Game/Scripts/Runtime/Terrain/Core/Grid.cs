@@ -89,6 +89,16 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 				return new((byte) (defaultHeight + 1), (byte)(defaultHeight + 0), (byte) (defaultHeight + 1), (byte) (defaultHeight + 0));
 			}
 
+			if (position.Equals(new(2, 1)))
+			{
+				return new((byte)(defaultHeight + 2), (byte)(defaultHeight + 2), (byte)(defaultHeight + 1), (byte)(defaultHeight + 0));
+			}
+
+			if (position.Equals(new(2, 2)))
+			{
+				return new((byte)(defaultHeight + 2), (byte)(defaultHeight + 2), (byte)(defaultHeight + 1), (byte)(defaultHeight + 0));
+			}
+
 			return GetTileData(position.x, position.y);
 		}
 

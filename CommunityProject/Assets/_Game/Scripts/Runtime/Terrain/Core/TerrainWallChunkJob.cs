@@ -2,7 +2,6 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Core
 {
@@ -60,54 +59,48 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 			var isNeighborInBounds = neighbor.IsInBounds;
 			var needsTriangle1 = !isNeighborInBounds || neighbor.GetHeight(neighborLeft) < tileData.GetHeight(corner);
 			var needsTriangle2 = !isNeighborInBounds
-			                     || neighbor.GetHeight(neighborRight) < tileData.GetHeight(corner.NeighborClockwise);
+								 || neighbor.GetHeight(neighborRight) < tileData.GetHeight(corner.NeighborClockwise);
 
 			if (!needsTriangle1 && !needsTriangle2)
 			{
 				return;
 			}
 
-			var vertexIndex = MeshUpdateData.Vertices.Length;
-
-			var vertex = new Vertex();
-
-			vertex.Position = _heightStep * tile.GetCornerPosition(corner.NeighborClockwise);
-			vertex.TexCoord0 = new(0, 1);
-			MeshUpdateData.Vertices.Add(vertex);
-
-			vertex.Position = _heightStep * tile.GetCornerPosition(corner);
-			vertex.TexCoord0 = new(1, 1);
-			MeshUpdateData.Vertices.Add(vertex);
-
-			if (needsTriangle1 && needsTriangle2)
-			{
-				vertex.Position = _heightStep * neighbor.GetCornerPosition(neighborLeft);
-				vertex.TexCoord0 = new(1, 0);
-				MeshUpdateData.Vertices.Add(vertex);
-
-				vertex.Position = _heightStep * neighbor.GetCornerPosition(neighborRight);
-				vertex.TexCoord0 = new(0, 0);
-				MeshUpdateData.Vertices.Add(vertex);
-
-				MeshUpdateData.Triangles.Add(new(vertexIndex, vertexIndex + 1, vertexIndex + 3));
-				MeshUpdateData.Triangles.Add(new(vertexIndex + 1, vertexIndex + 2, vertexIndex + 3));
-				return;
-			}
-
+			//TODO: Extract another Method for this
 			if (needsTriangle1)
 			{
-				vertex.Position = _heightStep * neighbor.GetCornerPosition(neighborLeft);
-				vertex.TexCoord0 = new(1, 0);
-				MeshUpdateData.Vertices.Add(vertex);
+				var vertexIndex = MeshUpdateData.Vertices.Length;
+
+				AddNewVertexToVertices(tile, corner.NeighborClockwise, new(0, 1));
+				AddNewVertexToVertices(tile, corner, new(1, 1));
+				AddNewVertexToVertices(neighbor, neighborLeft, new(1, 0));
+				MeshUpdateData.Triangles.Add(new(vertexIndex, vertexIndex + 1, vertexIndex + 2));
 			}
-			else
+			if (needsTriangle2)
 			{
-				vertex.Position = _heightStep * neighbor.GetCornerPosition(neighborRight);
-				vertex.TexCoord0 = new(0, 0);
-				MeshUpdateData.Vertices.Add(vertex);
+				var vertexIndex = MeshUpdateData.Vertices.Length;
+
+				AddNewVertexToVertices(tile, corner.NeighborClockwise, new(0, 1));
+				if (needsTriangle1)
+				{
+					AddNewVertexToVertices(neighbor, neighborLeft, new(1, 0));
+				}
+				else
+				{
+					AddNewVertexToVertices(tile, corner, new(1, 1));
+				}
+				AddNewVertexToVertices(neighbor, neighborRight, new(0, 0));
+				MeshUpdateData.Triangles.Add(new(vertexIndex, vertexIndex +1, vertexIndex + 2));
 			}
 
-			MeshUpdateData.Triangles.Add(new(vertexIndex, vertexIndex + 1, vertexIndex + 2));
+		}
+
+		private readonly void AddNewVertexToVertices(Tile tile, Corner corner, float2 texCoord)
+		{
+			Vertex vertex;
+			vertex.Position = _heightStep * tile.GetCornerPosition(corner);
+			vertex.TexCoord0 = texCoord;
+			MeshUpdateData.Vertices.Add(vertex);
 		}
 	}
 }
