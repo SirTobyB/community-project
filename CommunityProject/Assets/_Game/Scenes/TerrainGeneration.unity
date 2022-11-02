@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.17678763, g: 0.22129329, b: 0.30358672, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -210,14 +210,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 653439562}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.5080618, y: -0.1990449, z: 0.12197484, w: 0.8290817}
+  m_LocalPosition: {x: 5.78, y: 1.51, z: 0.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 63, y: -27, z: 0}
 --- !u!114 &653439565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,7 +405,7 @@ MonoBehaviour:
   Length: 32
   <MaxHeight>k__BackingField: 5
   ChunkSize: 16
-  <HeightStep>k__BackingField: 0.7
+  <HeightStep>k__BackingField: 0.5
   UpdateChunksEventChannel: {fileID: 11400000, guid: 53a59920aba8348e6bee5597db98bd0b,
     type: 2}
 --- !u!114 &1034941417

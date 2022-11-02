@@ -33,10 +33,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 
 			Mesh.ApplyAndDisposeWritableMeshData(_meshDataArray, new[] { _surfaceMesh, _wallMesh },
 				MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
-
-			// TODO: Could be a bit more performant if we do this ourselves in the chunk jobs.
-			_surfaceMesh.RecalculateNormals();
-			_wallMesh.RecalculateNormals();
 		}
 	}
 }

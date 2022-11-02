@@ -71,35 +71,36 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 			{
 				var vertexIndex = MeshUpdateData.Vertices.Length;
 
-				AddNewVertexToVertices(tile, corner.NeighborClockwise, new(0, 1));
-				AddNewVertexToVertices(tile, corner, new(1, 1));
-				AddNewVertexToVertices(neighbor, neighborLeft, new(1, 0));
+				AddNewVertexToVertices(ref tile, corner.NeighborClockwise, new(0, 1));
+				AddNewVertexToVertices(ref tile, corner, new(1, 1));
+				AddNewVertexToVertices(ref neighbor, neighborLeft, new(1, 0));
 				MeshUpdateData.Triangles.Add(new(vertexIndex, vertexIndex + 1, vertexIndex + 2));
 			}
 			if (needsTriangle2)
 			{
 				var vertexIndex = MeshUpdateData.Vertices.Length;
 
-				AddNewVertexToVertices(tile, corner.NeighborClockwise, new(0, 1));
+				AddNewVertexToVertices(ref tile, corner.NeighborClockwise, new(0, 1));
 				if (needsTriangle1)
 				{
-					AddNewVertexToVertices(neighbor, neighborLeft, new(1, 0));
+					AddNewVertexToVertices(ref neighbor, neighborLeft, new(1, 0));
 				}
 				else
 				{
-					AddNewVertexToVertices(tile, corner, new(1, 1));
+					AddNewVertexToVertices(ref tile, corner, new(1, 1));
 				}
-				AddNewVertexToVertices(neighbor, neighborRight, new(0, 0));
+				AddNewVertexToVertices(ref neighbor, neighborRight, new(0, 0));
 				MeshUpdateData.Triangles.Add(new(vertexIndex, vertexIndex +1, vertexIndex + 2));
 			}
-
 		}
 
-		private readonly void AddNewVertexToVertices(Tile tile, Corner corner, float2 texCoord)
+		private readonly void AddNewVertexToVertices(ref Tile tile, Corner corner, float2 texCoord)
 		{
-			Vertex vertex;
-			vertex.Position = _heightStep * tile.GetCornerPosition(corner);
-			vertex.TexCoord0 = texCoord;
+			var vertex = new Vertex
+			{
+				Position = _heightStep * tile.GetCornerPosition(corner),
+				TexCoord0 = texCoord
+			};
 			MeshUpdateData.Vertices.Add(vertex);
 		}
 	}

@@ -79,7 +79,17 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 			foreach (var chunk in chunksToUpdate)
 			{
-				chunkJobPairs.Add(new(chunk, Terrain.Grid, Terrain.MaxHeight, Terrain.HeightStep));
+				var jobPair = new ChunkJobPair()
+				{
+					Chunk = chunk,
+					Grid = Terrain.Grid,
+					MaxHeight = Terrain.MaxHeight,
+					HeightStep = Terrain.HeightStep
+				};
+
+				jobPair.Schedule();
+
+				chunkJobPairs.Add(jobPair);
 			}
 
 			JobHandle.ScheduleBatchedJobs();
@@ -112,58 +122,91 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 		private struct ChunkJobPair : IDisposable
 		{
-			private readonly ChunkMeshUpdater _meshUpdater;
+			private ChunkMeshUpdater _meshUpdater;
 			private JobHandle _jobHandle;
-			private NativeMeshUpdateData _terrainTileMeshUpdateData;
-			private NativeMeshUpdateData _terrainWallMeshUpdateData;
+			private NativeMeshUpdateData _surfaceMeshUpdateData;
+			private NativeMeshUpdateData _wallMeshUpdateData;
 
-			public Chunk Chunk { get; }
+			public Chunk Chunk { get; set; }
+			public Grid Grid { get; set; }
+			public byte MaxHeight { get; set; }
+			public float HeightStep { get; set; }
 
-			public ChunkJobPair(Chunk chunk, Grid grid, byte maxHeight, float heightStep)
+			public void Schedule()
 			{
-				Chunk = chunk;
-				_meshUpdater = chunk.AcquireMeshUpdater();
-				_terrainTileMeshUpdateData = new(Allocator.Persistent);
-				_terrainWallMeshUpdateData = new(Allocator.Persistent);
+				_meshUpdater = Chunk.AcquireMeshUpdater();
+				_surfaceMeshUpdateData = new(Allocator.Persistent);
+				_wallMeshUpdateData = new(Allocator.Persistent);
 
-				var terrainTileChunkJob = new TerrainTileChunkJob()
-				{
-					MeshUpdateData = _terrainTileMeshUpdateData,
-					Grid = grid,
-					Bounds = chunk.Bounds,
-					Position = chunk.Position,
-					HeightStep = heightStep
-				};
-				var terrainChunkJobHandle = terrainTileChunkJob.Schedule();
-
-				var terrainWallChunkJob = new TerrainWallChunkJob()
-				{
-					MeshUpdateData = _terrainWallMeshUpdateData,
-					Grid = grid,
-					Bounds = chunk.Bounds,
-					Position = chunk.Position,
-					HeightStep = heightStep
-				};
-				var terrainWallChunkJobHandle = terrainWallChunkJob.Schedule();
-
-				var surfaceMeshWriteJob = new WriteChunkMeshJob()
-				{
-					Bounds = chunk.GetSubMeshBounds(maxHeight),
-					MeshData = _meshUpdater.SurfaceMeshData,
-					MeshUpdateData = _terrainTileMeshUpdateData
-				};
-
-				var wallMeshWriteJob = new WriteChunkMeshJob()
-				{
-					Bounds = chunk.GetSubMeshBounds(maxHeight),
-					MeshData = _meshUpdater.WallMeshData,
-					MeshUpdateData = _terrainWallMeshUpdateData
-				};
+				var surfaceUpdateJobHandle = ScheduleSurfaceUpdate();
+				var wallUpdateJobHandle = ScheduleWallUpdate();
 
 				_jobHandle = JobHandle.CombineDependencies(
-					surfaceMeshWriteJob.Schedule(terrainChunkJobHandle),
-					wallMeshWriteJob.Schedule(terrainWallChunkJobHandle)
+					surfaceUpdateJobHandle,
+					wallUpdateJobHandle
 				);
+			}
+
+			private JobHandle ScheduleSurfaceUpdate()
+			{
+				var surfaceChunkJob = new TerrainSurfaceChunkJob()
+				{
+					MeshUpdateData = _surfaceMeshUpdateData,
+					Grid = Grid,
+					Bounds = Chunk.Bounds,
+					Position = Chunk.Position,
+					HeightStep = HeightStep
+				};
+				var surfaceChunkJobHandle = surfaceChunkJob.Schedule();
+
+				var surfaceNormalCalculationJob = new NormalCalculationJob()
+				{
+					MeshUpdateData = _surfaceMeshUpdateData
+				};
+				var surfaceNormalCalculationJobHandle = surfaceNormalCalculationJob.Schedule(surfaceChunkJobHandle);
+
+				var combineNormalsJob = new CombineNormalsJob()
+				{
+					SurfaceMeshUpdateData = _surfaceMeshUpdateData
+				};
+				var combineNormalsJobHandle = combineNormalsJob.Schedule(surfaceNormalCalculationJobHandle);
+
+				var meshWriteJob = new WriteChunkMeshJob()
+				{
+					Bounds = Chunk.GetSubMeshBounds(MaxHeight),
+					MeshData = _meshUpdater.SurfaceMeshData,
+					MeshUpdateData = _surfaceMeshUpdateData
+				};
+
+				return meshWriteJob.Schedule(combineNormalsJobHandle);
+			}
+
+			private JobHandle ScheduleWallUpdate()
+			{
+				var wallChunkJob = new TerrainWallChunkJob()
+				{
+					MeshUpdateData = _wallMeshUpdateData,
+					Grid = Grid,
+					Bounds = Chunk.Bounds,
+					Position = Chunk.Position,
+					HeightStep = HeightStep
+				};
+				var wallChunkJobHandle = wallChunkJob.Schedule();
+
+				var wallNormalCalculationJob = new NormalCalculationJob()
+				{
+					MeshUpdateData = _wallMeshUpdateData
+				};
+				var wallNormalCalculationJobHandle = wallNormalCalculationJob.Schedule(wallChunkJobHandle);
+
+				var meshWriteJob = new WriteChunkMeshJob()
+				{
+					Bounds = Chunk.GetSubMeshBounds(MaxHeight),
+					MeshData = _meshUpdater.WallMeshData,
+					MeshUpdateData = _wallMeshUpdateData
+				};
+
+				return meshWriteJob.Schedule(wallNormalCalculationJobHandle);
 			}
 
 			public void Complete()
@@ -174,8 +217,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			public void Dispose()
 			{
 				_meshUpdater.Dispose();
-				_terrainTileMeshUpdateData.Dispose();
-				_terrainWallMeshUpdateData.Dispose();
+				_surfaceMeshUpdateData.Dispose();
+				_wallMeshUpdateData.Dispose();
 			}
 		}
 	}

@@ -6,7 +6,7 @@ using Unity.Mathematics;
 namespace BoundfoxStudios.CommunityProject.Terrain.Core
 {
 	[BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
-	public struct TerrainTileChunkJob : IJob
+	public struct TerrainSurfaceChunkJob : IJob
 	{
 		public NativeMeshUpdateData MeshUpdateData;
 

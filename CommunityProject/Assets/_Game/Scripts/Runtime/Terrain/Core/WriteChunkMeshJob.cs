@@ -23,6 +23,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		private struct StreamVertex
 		{
 			public float3 Position;
+			public float3 Normal;
 			public float2 TexCoord0;
 		}
 
@@ -36,10 +37,11 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		private void Initialize()
 		{
 			var descriptor =
-				new NativeArray<VertexAttributeDescriptor>(2, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
+				new NativeArray<VertexAttributeDescriptor>(3, Allocator.Temp, NativeArrayOptions.UninitializedMemory);
 
 			descriptor[0] = new(dimension: 3);
-			descriptor[1] = new(VertexAttribute.TexCoord0, dimension: 2);
+			descriptor[1] = new(VertexAttribute.Normal, dimension: 3);
+			descriptor[2] = new(VertexAttribute.TexCoord0, dimension: 2);
 
 			var vertexCount = MeshUpdateData.Vertices.Length;
 			MeshData.SetVertexBufferParams(vertexCount, descriptor);
@@ -82,6 +84,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 			var streamVertex = new StreamVertex
 			{
 				Position = vertex.Position,
+				Normal = vertex.Normal,
 				TexCoord0 = vertex.TexCoord0
 			};
 

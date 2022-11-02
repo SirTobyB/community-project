@@ -8,6 +8,9 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		private readonly Mesh _surfaceMesh = new();
 		private readonly Mesh _wallMesh = new();
 
+		internal Mesh SurfaceMesh => _surfaceMesh;
+		internal Mesh WallMesh => _wallMesh;
+
 		public IntBounds Bounds { get; }
 		public int2 Position { get; }
 

@@ -29,6 +29,30 @@ namespace BoundfoxStudios.CommunityProject.Editor.Terrain
 			var size = new Vector3(chunk.Bounds.Size.x, 10, chunk.Bounds.Size.y);
 
 			Gizmos.DrawWireCube(center, size);
+
+			DrawChunkNormals(chunk);
+		}
+
+		private static void DrawChunkNormals(Chunk chunk)
+		{
+			DrawNormals(chunk.SurfaceMesh);
+			DrawNormals(chunk.WallMesh);
+		}
+
+		private static void DrawNormals(Mesh mesh)
+		{
+			var normals = mesh.normals;
+			var vertices = mesh.vertices;
+
+			for (var index = 0; index < normals.Length; index++)
+			{
+				var normal = normals[index];
+				Gizmos.color = Color.yellow;
+				Gizmos.DrawSphere(vertices[index], 0.05f);
+
+				Gizmos.color = Color.red;
+				Gizmos.DrawLine(vertices[index], vertices[index] + normal * 0.5f);
+			}
 		}
 	}
 }
