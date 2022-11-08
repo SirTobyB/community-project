@@ -32,10 +32,7 @@ namespace BoundfoxStudios.CommunityProject.Infrastructure.FileManagement
 			return JsonUtility.FromJson<T>(jsonFromFile);
 		}
 
-		private string CreateFilePath(string key)
-		{
-			return Path.Combine(_rootPath, key);
-		}
+		private string CreateFilePath(string key) => Path.Combine(_rootPath, key);
 
 		private void EnsurePath(string path)
 		{

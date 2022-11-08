@@ -28,7 +28,7 @@ namespace BoundfoxStudios.CommunityProject.Editor.Menus.GameObjectMenu
 				if (!item)
 				{
 					Debug.LogWarning($"{nameof(SafeInstantiateAsync)} invoked, but {nameof(itemSelector)} returned null. " +
-									 "Did you forget to fill the slot in the inspector?");
+					                 "Did you forget to fill the slot in the inspector?");
 					return;
 				}
 

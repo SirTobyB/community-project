@@ -1,6 +1,6 @@
 using BoundfoxStudios.CommunityProject.Infrastructure;
-using NUnit.Framework;
 using FluentAssertions;
+using NUnit.Framework;
 
 namespace BoundfoxStudios.CommunityProject.Tests.Editor.Infrastructure
 {

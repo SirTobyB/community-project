@@ -5,7 +5,7 @@ using UnityEngine.AddressableAssets;
 namespace BoundfoxStudios.CommunityProject.Build.Contributors
 {
 	/// <summary>
-	/// This class can read the contributors.json.
+	///   This class can read the contributors.json.
 	/// </summary>
 	public class ContributorsReader
 	{

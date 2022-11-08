@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace BoundfoxStudios.CommunityProject.Editor.Windows
 {
@@ -9,21 +10,13 @@ namespace BoundfoxStudios.CommunityProject.Editor.Windows
 		private bool _openAdditive;
 		private Vector2 _scrollPosition;
 
-		[MenuItem(Constants.MenuNames.LevelSelection, priority = 10000)]
-		private static void ShowWindow()
-		{
-			var window = GetWindow<LevelSelectionEditorWindow>();
-			window.titleContent = new GUIContent("Level Selection");
-			window.Show();
-		}
-
 		private void OnGUI()
 		{
 			_openAdditive = IsControlPressed();
 			EditorGUILayout.LabelField(
-			  _openAdditive
-				? "Will open scenes additively."
-				: "Press control to open scenes additively."
+				_openAdditive
+					? "Will open scenes additively."
+					: "Press control to open scenes additively."
 			);
 
 			_scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
@@ -37,6 +30,14 @@ namespace BoundfoxStudios.CommunityProject.Editor.Windows
 			{
 				Repaint();
 			}
+		}
+
+		[MenuItem(Constants.MenuNames.LevelSelection, priority = 10000)]
+		private static void ShowWindow()
+		{
+			var window = GetWindow<LevelSelectionEditorWindow>();
+			window.titleContent = new("Level Selection");
+			window.Show();
 		}
 
 		private void RenderScenes()
@@ -54,6 +55,7 @@ namespace BoundfoxStudios.CommunityProject.Editor.Windows
 				OpenSceneButton("MainMenu", "Menus/MainMenu");
 				EditorGUILayout.EndHorizontal();
 			}
+
 			EndFoldoutGroup("Menus", show);
 		}
 
@@ -67,6 +69,7 @@ namespace BoundfoxStudios.CommunityProject.Editor.Windows
 				OpenSceneButton("PersistentManagers", "Managers/PersistentManagers");
 				EditorGUILayout.EndHorizontal();
 			}
+
 			EndFoldoutGroup("Managers", show);
 		}
 
@@ -98,20 +101,23 @@ namespace BoundfoxStudios.CommunityProject.Editor.Windows
 				{
 					return;
 				}
+
 				EditorSceneManager.OpenScene(sceneFile, _openAdditive ? OpenSceneMode.Additive : OpenSceneMode.Single);
 			}
+
 			EditorGUI.EndDisabledGroup();
 		}
 
 		private bool IsSceneOpen(string sceneFile)
 		{
-			for (var i = 0; i < EditorSceneManager.sceneCount; i++)
+			for (var i = 0; i < SceneManager.sceneCount; i++)
 			{
-				if (EditorSceneManager.GetSceneAt(i).path == sceneFile)
+				if (SceneManager.GetSceneAt(i).path == sceneFile)
 				{
 					return true;
 				}
 			}
+
 			return false;
 		}
 	}

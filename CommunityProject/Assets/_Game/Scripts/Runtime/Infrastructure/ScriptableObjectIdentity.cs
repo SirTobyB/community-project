@@ -3,8 +3,8 @@ using System;
 namespace BoundfoxStudios.CommunityProject.Infrastructure
 {
 	/// <summary>
-	/// This class can be used for ScriptableObjects that should have an identity.
-	/// The identity is useful for saving references to disk and loading them back at runtime.
+	///   This class can be used for ScriptableObjects that should have an identity.
+	///   The identity is useful for saving references to disk and loading them back at runtime.
 	/// </summary>
 	[Serializable]
 	public class ScriptableObjectIdentity : IEquatable<ScriptableObjectIdentity>

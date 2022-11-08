@@ -10,12 +10,12 @@ namespace BoundfoxStudios.CommunityProject.Audio
 	{
 		private AudioSource _audioSource;
 
-		public event Action Finished;
-
 		private void OnEnable()
 		{
 			_audioSource = gameObject.GetComponent<AudioSource>();
 		}
+
+		public event Action Finished;
 
 		public void PlayAudioCue(AudioCueSO audioCue)
 		{

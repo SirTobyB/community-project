@@ -3,7 +3,7 @@ using UnityEngine;
 namespace BoundfoxStudios.CommunityProject.Audio.ScriptableObjects
 {
 	/// <summary>
-	/// <see cref="ScriptableObject"/> for holding a reference to an <see cref="AudioClip"/> and some Information about it.
+	///   <see cref="ScriptableObject" /> for holding a reference to an <see cref="AudioClip" /> and some Information about it.
 	/// </summary>
 	[CreateAssetMenu(menuName = Constants.MenuNames.Audio + "/Playlist Item")]
 	public class PlaylistItemSO : ScriptableObject

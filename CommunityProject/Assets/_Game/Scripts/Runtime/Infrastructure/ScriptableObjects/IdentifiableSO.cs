@@ -5,8 +5,8 @@ using UnityEngine;
 namespace BoundfoxStudios.CommunityProject.Infrastructure.ScriptableObjects
 {
 	/// <summary>
-	/// Base class for ScriptableObjects to have a specific identity.
-	/// See <see cref="ScriptableObjectIdentity"/> for more information.
+	///   Base class for ScriptableObjects to have a specific identity.
+	///   See <see cref="ScriptableObjectIdentity" /> for more information.
 	/// </summary>
 	public abstract class IdentifiableSO : ScriptableObject, IEquatable<IdentifiableSO>
 	{

@@ -10,8 +10,8 @@ using UnityEngine.SceneManagement;
 namespace BoundfoxStudios.CommunityProject.SceneManagement
 {
 	/// <summary>
-	/// This component should be the very first component that is loaded by an initialization scene.
-	/// It will handle bootstrapping the most necessary parts of the game to boot it.
+	///   This component should be the very first component that is loaded by an initialization scene.
+	///   It will handle bootstrapping the most necessary parts of the game to boot it.
 	/// </summary>
 	[AddComponentMenu(Constants.MenuNames.SceneManagement + "/" + nameof(InitializationLoader))]
 	public class InitializationLoader : MonoBehaviour

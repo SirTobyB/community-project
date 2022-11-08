@@ -6,7 +6,7 @@ using UnityEngine.Audio;
 namespace BoundfoxStudios.CommunityProject.Settings
 {
 	/// <summary>
-	/// Responsible for applying game settings to their systems.
+	///   Responsible for applying game settings to their systems.
 	/// </summary>
 	[AddComponentMenu(Constants.MenuNames.MenuName + "/" + nameof(SettingsSystem))]
 	public class SettingsSystem : MonoBehaviour
@@ -73,9 +73,6 @@ namespace BoundfoxStudios.CommunityProject.Settings
 			QualitySettings.SetQualityLevel(Settings.Graphic.GraphicLevel);
 		}
 
-		private float GetNormalizedToMixerVolume(float value)
-		{
-			return (value - 1) * 80;
-		}
+		private float GetNormalizedToMixerVolume(float value) => (value - 1) * 80;
 	}
 }

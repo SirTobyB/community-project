@@ -62,7 +62,8 @@ namespace BoundfoxStudios.CommunityProject.Tests.Editor.Events.ScriptableObjects
 		[Test]
 		public void RaiseDoesRaiseTheEvent()
 		{
-			LogAssert.Expect(LogType.Log, new Regex(@"Event.*?Object Event Channel Test raised.*?value.*?Foo=Unit Test, Bar=5"));
+			LogAssert.Expect(LogType.Log,
+				new Regex(@"Event.*?Object Event Channel Test raised.*?value.*?Foo=Unit Test, Bar=5"));
 
 			var raised = false;
 
@@ -84,10 +85,7 @@ namespace BoundfoxStudios.CommunityProject.Tests.Editor.Events.ScriptableObjects
 				public int Bar;
 				public string Foo;
 
-				public override string ToString()
-				{
-					return $"{nameof(Foo)}={Foo}, {nameof(Bar)}={Bar.ToString()}";
-				}
+				public override string ToString() => $"{nameof(Foo)}={Foo}, {nameof(Bar)}={Bar.ToString()}";
 			}
 		}
 	}

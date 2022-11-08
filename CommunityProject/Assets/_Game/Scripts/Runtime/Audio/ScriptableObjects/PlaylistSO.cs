@@ -3,7 +3,7 @@ using UnityEngine;
 namespace BoundfoxStudios.CommunityProject.Audio.ScriptableObjects
 {
 	/// <summary>
-	/// Container for <see cref="PlaylistItemSO"/>s
+	///   Container for <see cref="PlaylistItemSO" />s
 	/// </summary>
 	[CreateAssetMenu(menuName = Constants.MenuNames.Audio + "/Playlist")]
 	public class PlaylistSO : ScriptableObject

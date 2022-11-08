@@ -11,7 +11,7 @@ namespace BoundfoxStudios.CommunityProject.Input.ScriptableObjects
 		{
 			if (_gameInput == null)
 			{
-				_gameInput = new GameInput();
+				_gameInput = new();
 
 				_gameInput.Gameplay.SetCallbacks(this);
 				_gameInput.UI.SetCallbacks(this);

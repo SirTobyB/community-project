@@ -8,7 +8,7 @@ namespace BoundfoxStudios.CommunityProject.Events.ScriptableObjects
 	{
 #if UNITY_EDITOR
 		/// <summary>
-		/// In-Editor description to let developers for what certain event instances are.
+		///   In-Editor description to let developers for what certain event instances are.
 		/// </summary>
 		[TextArea]
 		[SerializeField]
@@ -18,20 +18,20 @@ namespace BoundfoxStudios.CommunityProject.Events.ScriptableObjects
 	}
 
 	/// <summary>
-	/// Base EventChannel without an argument.
+	///   Base EventChannel without an argument.
 	/// </summary>
 	public abstract class EventChannelSO : EventChannelBaseSO
 	{
 		public UnityAction Raised = delegate { };
 
-		private void OnDisable()
-		{
-			Raised -= Log;
-		}
-
 		private void OnEnable()
 		{
 			Raised += Log;
+		}
+
+		private void OnDisable()
+		{
+			Raised -= Log;
 		}
 
 		public void Raise()
@@ -46,20 +46,20 @@ namespace BoundfoxStudios.CommunityProject.Events.ScriptableObjects
 	}
 
 	/// <summary>
-	/// Base EventChannel with an argument.
+	///   Base EventChannel with an argument.
 	/// </summary>
 	public abstract class EventChannelSO<T> : EventChannelBaseSO
 	{
 		public UnityAction<T> Raised = delegate { };
 
-		private void OnDisable()
-		{
-			Raised -= Log;
-		}
-
 		private void OnEnable()
 		{
 			Raised += Log;
+		}
+
+		private void OnDisable()
+		{
+			Raised -= Log;
 		}
 
 		public void Raise(T value)
@@ -69,7 +69,8 @@ namespace BoundfoxStudios.CommunityProject.Events.ScriptableObjects
 
 		private void Log(T value)
 		{
-			Debug.Log($"<b><color=yellow>Event</color></b> {name} raised with type {value.GetType().Name} and value {value}!");
+			Debug.Log(
+				$"<b><color=yellow>Event</color></b> {name} raised with type {value.GetType().Name} and value {value}!");
 		}
 	}
 }

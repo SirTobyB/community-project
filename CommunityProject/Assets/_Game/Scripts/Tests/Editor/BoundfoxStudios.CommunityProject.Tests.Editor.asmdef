@@ -1,25 +1,25 @@
 {
-    "name": "BoundfoxStudios.CommunityProject.Tests.Editor",
-    "rootNamespace": "BoundfoxStudios.CommunityProject.Tests.Editor",
-    "references": [
-        "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner",
-        "BoundfoxStudios.CommunityProject",
-        "BoundfoxStudios.FluentAssertions"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": true,
-    "precompiledReferences": [
-        "nunit.framework.dll"
-    ],
-    "autoReferenced": false,
-    "defineConstraints": [
-        "UNITY_INCLUDE_TESTS"
-    ],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "BoundfoxStudios.CommunityProject.Tests.Editor",
+  "rootNamespace": "BoundfoxStudios.CommunityProject.Tests.Editor",
+  "references": [
+    "UnityEngine.TestRunner",
+    "UnityEditor.TestRunner",
+    "BoundfoxStudios.CommunityProject",
+    "BoundfoxStudios.FluentAssertions"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "nunit.framework.dll"
+  ],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

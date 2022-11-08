@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BoundfoxStudios.CommunityProject.Build.BuildManifest
 {
 	/// <summary>
-	/// This class abstracts the manifest.json file.
+	///   This class abstracts the manifest.json file.
 	/// </summary>
 	[Serializable]
 	public class BuildManifest
