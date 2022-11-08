@@ -13,10 +13,10 @@ namespace BoundfoxStudios.CommunityProject.Audio
 	[AddComponentMenu(Constants.MenuNames.Audio + "/" + nameof(BackgroundMusicPlayer))]
 	public class BackgroundMusicPlayer : MonoBehaviour
 	{
+		private AudioSource _audioSource;
+
 		[SerializeField]
 		private PlaylistSO Playlist;
-
-		private AudioSource _audioSource;
 
 		private void Awake()
 		{

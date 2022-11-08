@@ -18,6 +18,8 @@ namespace BoundfoxStudios.CommunityProject.Infrastructure.ScriptableObjects
 		private ScriptableObjectIdentity _identity;
 		public ScriptableObjectIdentity Identity => _identity ??= new() { Guid = _guid };
 
+		public bool Equals(IdentifiableSO other) => Identity.Equals(other == null ? null : other.Identity);
+
 		protected virtual void OnValidate()
 		{
 #if UNITY_EDITOR
@@ -25,8 +27,6 @@ namespace BoundfoxStudios.CommunityProject.Infrastructure.ScriptableObjects
 			_guid = AssetDatabase.AssetPathToGUID(path);
 #endif
 		}
-
-		public bool Equals(IdentifiableSO other) => Identity.Equals(other == null ? null : other.Identity);
 
 		public static implicit operator ScriptableObjectIdentity(IdentifiableSO identifiable) => identifiable.Identity;
 	}

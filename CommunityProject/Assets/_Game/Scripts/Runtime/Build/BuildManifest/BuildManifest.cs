@@ -11,19 +11,19 @@ namespace BoundfoxStudios.CommunityProject.Build.BuildManifest
 	{
 		[SerializeField]
 		// ReSharper disable once InconsistentNaming
-		private string sha;
-
-		[SerializeField]
-		// ReSharper disable once InconsistentNaming
-		private string shortSha;
-
-		[SerializeField]
-		// ReSharper disable once InconsistentNaming
 		private int runId;
 
 		[SerializeField]
 		// ReSharper disable once InconsistentNaming
 		private int runNumber;
+
+		[SerializeField]
+		// ReSharper disable once InconsistentNaming
+		private string sha;
+
+		[SerializeField]
+		// ReSharper disable once InconsistentNaming
+		private string shortSha;
 
 		public string Sha => sha;
 		public string ShortSha => shortSha;

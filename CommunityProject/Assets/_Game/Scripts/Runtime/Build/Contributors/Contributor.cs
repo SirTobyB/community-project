@@ -8,7 +8,7 @@ namespace BoundfoxStudios.CommunityProject.Build.Contributors
 	{
 		[SerializeField]
 		// ReSharper disable once InconsistentNaming
-		private string user;
+		private string[] contributions;
 
 		[SerializeField]
 		// ReSharper disable once InconsistentNaming
@@ -20,7 +20,7 @@ namespace BoundfoxStudios.CommunityProject.Build.Contributors
 
 		[SerializeField]
 		// ReSharper disable once InconsistentNaming
-		private string[] contributions;
+		private string user;
 
 
 		/// <summary>

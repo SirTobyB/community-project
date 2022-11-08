@@ -30,8 +30,8 @@ namespace BoundfoxStudios.CommunityProject.EditorExtensions.ScriptableObjects
 		[Serializable]
 		public class CameraPrefabs
 		{
-			public GameObject Menu;
 			public GameObject Level;
+			public GameObject Menu;
 		}
 
 		[Serializable]

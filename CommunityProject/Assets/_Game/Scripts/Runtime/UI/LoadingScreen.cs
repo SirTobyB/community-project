@@ -8,10 +8,12 @@ namespace BoundfoxStudios.CommunityProject.UI
 	[AddComponentMenu(Constants.MenuNames.UI + "/" + nameof(LoadingScreen))]
 	public class LoadingScreen : MonoBehaviour
 	{
+		private Tween _runningTween;
+
 		[Header("Settings")]
 		[SerializeField]
 		[Min(0)]
-		private float FadeInOutTime = 0.133f;
+		private readonly float FadeInOutTime = 0.133f;
 
 		[Header("References")]
 		[SerializeField]
@@ -20,8 +22,6 @@ namespace BoundfoxStudios.CommunityProject.UI
 		[Header("Listening Channels")]
 		[SerializeField]
 		private BoolEventChannelSO ToggleLoadingScreenEventChannel;
-
-		private Tween _runningTween;
 
 		private void Awake()
 		{

@@ -11,15 +11,15 @@ namespace BoundfoxStudios.CommunityProject.Settings
 	[AddComponentMenu(Constants.MenuNames.MenuName + "/" + nameof(SettingsSystem))]
 	public class SettingsSystem : MonoBehaviour
 	{
+		[Header("Listening on")]
 		[SerializeField]
-		private SettingsSO Settings;
+		private VoidEventChannelSO GameSettingsChangedEventChannel;
 
 		[SerializeField]
 		private AudioMixer MainMixer;
 
-		[Header("Listening on")]
 		[SerializeField]
-		private VoidEventChannelSO GameSettingsChangedEventChannel;
+		private SettingsSO Settings;
 
 		private void Awake()
 		{

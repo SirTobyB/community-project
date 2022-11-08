@@ -13,17 +13,17 @@ namespace BoundfoxStudios.CommunityProject.UI
 	{
 		private TextMeshProUGUI _buildNumberText;
 
+		public void OnPointerClick(PointerEventData eventData)
+		{
+			CopyBuildNumberToClipboard();
+		}
+
 		[UsedImplicitly]
 		// ReSharper disable once Unity.IncorrectMethodSignature
 		private async UniTaskVoid Awake()
 		{
 			_buildNumberText = gameObject.GetComponent<TextMeshProUGUI>();
 			_buildNumberText.text = await CreateBuildNumberAsync();
-		}
-
-		public void OnPointerClick(PointerEventData eventData)
-		{
-			CopyBuildNumberToClipboard();
 		}
 
 		private async UniTask<string> CreateBuildNumberAsync()

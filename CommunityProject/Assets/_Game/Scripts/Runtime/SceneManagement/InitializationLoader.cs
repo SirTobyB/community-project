@@ -16,16 +16,16 @@ namespace BoundfoxStudios.CommunityProject.SceneManagement
 	[AddComponentMenu(Constants.MenuNames.SceneManagement + "/" + nameof(InitializationLoader))]
 	public class InitializationLoader : MonoBehaviour
 	{
-		[Header("Scenes")]
+		[Header("Broadcasting Channels")]
 		[SerializeField]
-		private AssetReferenceT<PersistentManagersSceneSO> PersistentManagersScene;
+		private AssetReferenceT<LoadSceneEventChannelSO> LoadSceneEventChannel;
 
 		[SerializeField]
 		private AssetReferenceT<MenuSceneSO> MainMenuScene;
 
-		[Header("Broadcasting Channels")]
+		[Header("Scenes")]
 		[SerializeField]
-		private AssetReferenceT<LoadSceneEventChannelSO> LoadSceneEventChannel;
+		private AssetReferenceT<PersistentManagersSceneSO> PersistentManagersScene;
 
 		[Header("GameSettings Reference")]
 		[SerializeField]

@@ -9,8 +9,8 @@ namespace BoundfoxStudios.CommunityProject.Audio.ScriptableObjects
 	public class PlaylistItemSO : ScriptableObject
 	{
 		public AudioClip AudioClip;
-		public string Title;
 		public string Interpreter;
+		public string Title;
 		public string Url;
 
 		private void OnValidate()

@@ -9,6 +9,8 @@ namespace BoundfoxStudios.CommunityProject.SceneManagement
 	[AddComponentMenu(Constants.MenuNames.SceneManagement + "/" + nameof(SceneLoader))]
 	public class SceneLoader : MonoBehaviour
 	{
+		private SceneSO _currentlyLoadedScene;
+
 		[Header("Listening Channels")]
 		[SerializeField]
 		private LoadSceneEventChannelSO LoadSceneEventChannel;
@@ -22,8 +24,6 @@ namespace BoundfoxStudios.CommunityProject.SceneManagement
 
 		[SerializeField]
 		private BoolEventChannelSO ToggleLoadingScreenEventChannel;
-
-		private SceneSO _currentlyLoadedScene;
 
 		private void OnEnable()
 		{

@@ -8,11 +8,11 @@ namespace BoundfoxStudios.CommunityProject.Audio.ScriptableObjects
 	[CreateAssetMenu(menuName = Constants.MenuNames.Audio + "/Playlist")]
 	public class PlaylistSO : ScriptableObject
 	{
-		[SerializeField]
-		private PlaylistItemSO[] Clips;
-
 		private int _lastClipIndex;
 		private int _nextClipIndex;
+
+		[SerializeField]
+		private PlaylistItemSO[] Clips;
 
 		public AudioClip GetNextRandomClipWithoutImmediateRepeat()
 		{

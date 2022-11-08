@@ -52,10 +52,10 @@ namespace BoundfoxStudios.CommunityProject.Settings.ScriptableObjects
 		public class AudioConfig
 		{
 			[Range(0f, 1f)]
-			public float MasterVolume = 1f;
+			public float EffectsVolume = 1f;
 
 			[Range(0f, 1f)]
-			public float EffectsVolume = 1f;
+			public float MasterVolume = 1f;
 
 			[Range(0f, 1f)]
 			public float MusicVolume = 1f;
@@ -67,9 +67,9 @@ namespace BoundfoxStudios.CommunityProject.Settings.ScriptableObjects
 		[Serializable]
 		public class GraphicConfig
 		{
-			public int ResolutionIndex = -1;
-			public bool IsFullscreen = true;
 			public int GraphicLevel = 1;
+			public bool IsFullscreen = true;
+			public int ResolutionIndex = -1;
 		}
 	}
 }
