@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-dotnet format whitespace --folder Assets/_Game/Scripts
+dotnet jb cleanupcode CommunityProject.sln --profile="Unity: Full Cleanup" --include="**/_Game/Scripts/**/*.cs" -eXtensions="JetBrains.Unity"
