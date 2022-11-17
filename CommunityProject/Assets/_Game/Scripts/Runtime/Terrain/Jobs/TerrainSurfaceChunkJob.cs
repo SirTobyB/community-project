@@ -86,10 +86,15 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			vertex.TexCoord0 = new(0, 0);
 			MeshUpdateData.Vertices.Add(vertex);
 
-			MeshUpdateData.Triangles.Add(new(centerVertexIndex, northWestVertexIndex, northEastVertexIndex));
-			MeshUpdateData.Triangles.Add(new(centerVertexIndex, northEastVertexIndex, southEastVertexIndex));
-			MeshUpdateData.Triangles.Add(new(centerVertexIndex, southEastVertexIndex, southWestVertexIndex));
-			MeshUpdateData.Triangles.Add(new(centerVertexIndex, southWestVertexIndex, northWestVertexIndex));
+			var northTileType = tile.GetTileType(Direction.North);
+			var eastTileType = tile.GetTileType(Direction.East);
+			var southTileType = tile.GetTileType(Direction.South);
+			var westTileType = tile.GetTileType(Direction.West);
+
+			MeshUpdateData.AddToTriangles(northTileType, centerVertexIndex, northWestVertexIndex, northEastVertexIndex);
+			MeshUpdateData.AddToTriangles(eastTileType, centerVertexIndex, northEastVertexIndex, southEastVertexIndex);
+			MeshUpdateData.AddToTriangles(southTileType, centerVertexIndex, southEastVertexIndex, southWestVertexIndex);
+			MeshUpdateData.AddToTriangles(westTileType, centerVertexIndex, southWestVertexIndex, northWestVertexIndex);
 		}
 	}
 }

@@ -420,7 +420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7739ba74e91d48269c3a53b764af67c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Material: {fileID: 2100000, guid: e8a1e325bda224e8dbd8c518e57164e4, type: 2}
   Terrain: {fileID: 1034941416}
+  TileTypes: {fileID: 11400000, guid: 104cc583392dc42e28e4046c5730d020, type: 2}
   UpdateChunksEventChannel: {fileID: 11400000, guid: 53a59920aba8348e6bee5597db98bd0b,
     type: 2}

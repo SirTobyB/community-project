@@ -44,14 +44,15 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 
 		private void GenerateWallsFor(ref Tile tile)
 		{
-			GenerateWalls(ref tile, tile.GetNeighbor(Direction.North), Corner.NorthWest);
-			GenerateWalls(ref tile, tile.GetNeighbor(Direction.East), Corner.NorthEast);
-			GenerateWalls(ref tile, tile.GetNeighbor(Direction.South), Corner.SouthEast);
-			GenerateWalls(ref tile, tile.GetNeighbor(Direction.West), Corner.SouthWest);
+			GenerateWalls(ref tile, Direction.North, Corner.NorthWest);
+			GenerateWalls(ref tile, Direction.East, Corner.NorthEast);
+			GenerateWalls(ref tile, Direction.South, Corner.SouthEast);
+			GenerateWalls(ref tile, Direction.West, Corner.SouthWest);
 		}
 
-		private void GenerateWalls(ref Tile tile, Tile neighbor, Corner corner)
+		private void GenerateWalls(ref Tile tile, Direction direction, Corner corner)
 		{
+			var neighbor = tile.GetNeighbor(direction);
 			var neighborLeft = corner.NeighborCounterClockwise;
 			var neighborRight = corner.NeighborOpposite;
 
@@ -67,6 +68,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 				return;
 			}
 
+			var tileType = tile.GetTileType(direction);
+
 			//TODO: Extract another Method for this
 			if (needsTriangle1)
 			{
@@ -75,7 +78,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 				AddNewVertexToVertices(ref tile, corner.NeighborClockwise, new(0, 1));
 				AddNewVertexToVertices(ref tile, corner, new(1, 1));
 				AddNewVertexToVertices(ref neighbor, neighborLeft, new(1, 0));
-				MeshUpdateData.Triangles.Add(new(vertexIndex, vertexIndex + 1, vertexIndex + 2));
+				MeshUpdateData.AddToTriangles(tileType, vertexIndex, vertexIndex + 1, vertexIndex + 2);
 			}
 			if (needsTriangle2)
 			{
@@ -91,7 +94,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 					AddNewVertexToVertices(ref tile, corner, new(1, 1));
 				}
 				AddNewVertexToVertices(ref neighbor, neighborRight, new(0, 0));
-				MeshUpdateData.Triangles.Add(new(vertexIndex, vertexIndex +1, vertexIndex + 2));
+				MeshUpdateData.AddToTriangles(tileType, vertexIndex, vertexIndex +1, vertexIndex + 2);
 			}
 		}
 

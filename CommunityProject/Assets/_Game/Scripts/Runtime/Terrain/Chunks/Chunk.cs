@@ -1,3 +1,4 @@
+using BoundfoxStudios.CommunityProject.Terrain.ScriptableObjects;
 using BoundfoxStudios.CommunityProject.Terrain.Tiles;
 using Unity.Mathematics;
 using UnityEngine;
@@ -32,10 +33,18 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 				new(Bounds.Size.x, maxHeight, Bounds.Size.y)
 			);
 
-		public void Render(Matrix4x4 matrix, Material material, int layer)
+		public void Render(Matrix4x4 matrix, TileTypesSO tileTypes, int layer)
 		{
-			Graphics.DrawMesh(_surfaceMesh, matrix, material, layer);
-			Graphics.DrawMesh(_wallMesh, matrix, material, layer);
+			for (var i = 0; i < _surfaceMesh.subMeshCount; i++)
+			{
+				Graphics.DrawMesh(_surfaceMesh, matrix, tileTypes.ById((byte)i).SurfaceMaterial, layer, null, i);
+			}
+
+			for (var i = 0; i < _wallMesh.subMeshCount; i++)
+			{
+				Graphics.DrawMesh(_wallMesh, matrix, tileTypes.ById((byte)i).WallMaterial, layer, null, i);
+			}
+
 		}
 	}
 }

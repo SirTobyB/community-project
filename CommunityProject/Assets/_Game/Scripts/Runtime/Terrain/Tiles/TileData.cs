@@ -4,10 +4,15 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {
 	public struct TileData
 	{
-		private byte _cornerNorthWestHeight;
-		private byte _cornerNorthEastHeight;
-		private byte _cornerSouthEastHeight;
-		private byte _cornerSouthWestHeight;
+		private readonly byte _cornerNorthWestHeight;
+		private readonly byte _cornerNorthEastHeight;
+		private readonly byte _cornerSouthEastHeight;
+		private readonly byte _cornerSouthWestHeight;
+
+		private readonly byte _northTriangleTileTypeId;
+		private readonly byte _eastTriangleTileTypeId;
+		private readonly byte _southTriangleTileTypeId;
+		private readonly byte _westTriangleTileTypeId;
 
 		public bool IsFlat =>
 			_cornerNorthWestHeight == _cornerNorthEastHeight
@@ -23,29 +28,34 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 			                        _cornerNorthEastHeight == _cornerSouthEastHeight)
 		                       );
 
-		public TileData(byte height)
-		{
-			_cornerNorthWestHeight = height;
-			_cornerNorthEastHeight = height;
-			_cornerSouthEastHeight = height;
-			_cornerSouthWestHeight = height;
-		}
+		public TileData(byte height) : this(height, height, height, height) { }
 
-		internal TileData(byte cornerNorthWestHeight, byte cornerNorthEastHeight, byte cornerSouthEastHeight,
-			byte cornerSouthWestHeight)
+		internal TileData(
+			byte cornerNorthWestHeight,
+			byte cornerNorthEastHeight,
+			byte cornerSouthEastHeight,
+			byte cornerSouthWestHeight,
+			byte northTriangleTileTypeId = 0,
+			byte eastTriangleTileTypeId = 0,
+			byte southTriangleTileTypeId = 0,
+			byte westTriangleTileTypeId = 0)
 		{
 			_cornerNorthWestHeight = cornerNorthWestHeight;
 			_cornerNorthEastHeight = cornerNorthEastHeight;
 			_cornerSouthEastHeight = cornerSouthEastHeight;
 			_cornerSouthWestHeight = cornerSouthWestHeight;
+			_northTriangleTileTypeId = northTriangleTileTypeId;
+			_eastTriangleTileTypeId = eastTriangleTileTypeId;
+			_southTriangleTileTypeId = southTriangleTileTypeId;
+			_westTriangleTileTypeId = westTriangleTileTypeId;
 		}
 
 		public byte GetHeight(Corner corner) => corner.Direction switch
 		{
-			CornerDirection.NorthWest => _cornerNorthWestHeight,
-			CornerDirection.NorthEast => _cornerNorthEastHeight,
-			CornerDirection.SouthEast => _cornerSouthEastHeight,
-			CornerDirection.SouthWest => _cornerSouthWestHeight,
+			Corners.NorthWest => _cornerNorthWestHeight,
+			Corners.NorthEast => _cornerNorthEastHeight,
+			Corners.SouthEast => _cornerSouthEastHeight,
+			Corners.SouthWest => _cornerSouthWestHeight,
 			_ => throw new ArgumentOutOfRangeException(nameof(corner), "No valid corner direction")
 		};
 
@@ -82,5 +92,14 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 
 			return count;
 		}
+
+		public byte GetTileType(Direction direction) => direction.ABC switch
+		{
+			Directions.North => _northTriangleTileTypeId,
+			Directions.East => _eastTriangleTileTypeId,
+			Directions.South => _southTriangleTileTypeId,
+			Directions.West => _westTriangleTileTypeId,
+			_ => throw new ArgumentOutOfRangeException(nameof(direction), "Invalid direction")
+		};
 	}
 }

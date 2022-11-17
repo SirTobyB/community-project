@@ -79,6 +79,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 
 		public readonly bool IsInBounds => _grid.IsInBounds(Position);
 		public readonly byte GetHeight(Corner corner) => GetData().GetHeight(corner);
+
+		public byte GetTileType(Direction direction) => GetData().GetTileType(direction);
 	}
 }
 

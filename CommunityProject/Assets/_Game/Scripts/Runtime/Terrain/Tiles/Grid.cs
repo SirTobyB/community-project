@@ -69,27 +69,27 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 			// TODO: Remove test data
 			if (position.Equals(new(1,1)))
 			{
-				return new((byte) (defaultHeight + 1), (byte)(defaultHeight + 1), defaultHeight, defaultHeight);
+				return new((byte) (defaultHeight + 1), (byte)(defaultHeight + 1), defaultHeight, defaultHeight, 1, 2, 1, 1);
 			}
 
 			if (position.Equals(new(3,1)))
 			{
-				return new((byte) (defaultHeight + 0), (byte)(defaultHeight + 0), (byte) (defaultHeight + 1), (byte) (defaultHeight + 0));
+				return new((byte) (defaultHeight + 0), (byte)(defaultHeight + 0), (byte) (defaultHeight + 1), (byte) (defaultHeight + 0), 1);
 			}
 
 			if (position.Equals(new(5,1)))
 			{
-				return new((byte) (defaultHeight + 0), (byte)(defaultHeight + 0), (byte) (defaultHeight + 1), (byte) (defaultHeight + 0));
+				return new((byte) (defaultHeight + 0), (byte)(defaultHeight + 0), (byte) (defaultHeight + 1), (byte) (defaultHeight + 0), 0, 1);
 			}
 
 			if (position.Equals(new(6,0)))
 			{
-				return new((byte) (defaultHeight + 1), (byte)(defaultHeight + 0), (byte) (defaultHeight + 1), (byte) (defaultHeight + 0));
+				return new((byte) (defaultHeight + 1), (byte)(defaultHeight + 0), (byte) (defaultHeight + 1), (byte) (defaultHeight + 0), 0, 0, 1);
 			}
 
 			if (position.Equals(new(2, 1)))
 			{
-				return new((byte)(defaultHeight + 2), (byte)(defaultHeight + 2), (byte)(defaultHeight + 1), (byte)(defaultHeight + 0));
+				return new((byte)(defaultHeight + 2), (byte)(defaultHeight + 2), (byte)(defaultHeight + 1), (byte)(defaultHeight + 0), 0, 0, 0, 1);
 			}
 
 			if (position.Equals(new(2, 2)))

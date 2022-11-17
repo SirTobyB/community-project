@@ -7,6 +7,15 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 	{
 		internal byte Index { get; }
 
+		public Directions ABC => Index switch
+		{
+			0 => Directions.North,
+			1 => Directions.East,
+			2 => Directions.South,
+			3 => Directions.West,
+			_ => throw new ArgumentOutOfRangeException(nameof(Index), $"{nameof(Index)} can only be in range 0-3")
+		};
+
 		private static readonly int2[] Vectors = {
 			new(0, 1),  // North
 			new(1, 0),  // East

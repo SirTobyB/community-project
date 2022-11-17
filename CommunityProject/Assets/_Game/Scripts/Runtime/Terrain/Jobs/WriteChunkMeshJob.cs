@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Runtime.InteropServices;
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -47,24 +49,61 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			MeshData.SetVertexBufferParams(vertexCount, descriptor);
 			descriptor.Dispose();
 
-			const int verticesPerTriangle = 3;
-			var triangleIndexCount = MeshUpdateData.Triangles.Length * verticesPerTriangle;
+			var triangleIndexCount = CalculateTriangleIndexCount();
 			MeshData.SetIndexBufferParams(triangleIndexCount, IndexFormat.UInt16);
 
-			MeshData.subMeshCount = 1;
-			MeshData.SetSubMesh(0, new(0, triangleIndexCount)
+			var subMeshCount = MeshUpdateData.Triangles.Count();
+			MeshData.subMeshCount = subMeshCount;
+
+			var previousStartIndex = 0;
+			for (var i = 0; i < subMeshCount; i++)
 			{
-				vertexCount = vertexCount,
-				bounds = Bounds
-			}, MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
+				var triangleBucket = MeshUpdateData.Triangles[(byte)i];
+
+				var subMeshTriangleStartIndex = previousStartIndex;
+				var subMeshTriangleIndexCount = CalculateTriangleIndexCount(triangleBucket);
+				var subMeshVertexCount = subMeshTriangleIndexCount / 3;
+
+				MeshData.SetSubMesh(i, new(subMeshTriangleStartIndex, subMeshTriangleIndexCount)
+				{
+					vertexCount = subMeshVertexCount,
+					bounds = Bounds,
+				}, MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
+
+				previousStartIndex += subMeshTriangleIndexCount;
+			}
+		}
+
+		private int CalculateTriangleIndexCount()
+		{
+			var result = 0;
+
+			foreach (var kvp in MeshUpdateData.Triangles)
+			{
+				result += CalculateTriangleIndexCount(kvp.Value);
+			}
+
+			return result;
+		}
+
+		private int CalculateTriangleIndexCount(UnsafeList<Triangle> triangles)
+		{
+			const int verticesPerTriangle = 3;
+			return triangles.Length * verticesPerTriangle;
 		}
 
 		private void WriteTriangles()
 		{
 			var triangles = MeshData.GetIndexData<ushort>();
-			for (var i = 0; i < MeshUpdateData.Triangles.Length; i++)
+			var index = 0;
+
+			foreach (var kvp in MeshUpdateData.Triangles)
 			{
-				WriteTriangle(i, triangles);
+				for (var i = 0; i < kvp.Value.Length; i++)
+				{
+					WriteTriangle(kvp.Key, i, index, triangles);
+					index++;
+				}
 			}
 		}
 
@@ -91,11 +130,12 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			vertices[i] = streamVertex;
 		}
 
-		private void WriteTriangle(int i, NativeArray<ushort> triangles)
+		private void WriteTriangle(byte tileType, int i, int index, NativeArray<ushort> triangles)
 		{
-			var triangle = MeshUpdateData.Triangles[i];
+			var triangle2 = MeshUpdateData.Triangles[tileType];
+			var triangle = triangle2[i];
 
-			var triangleIndex = i * 3;
+			var triangleIndex = index * 3;
 			triangles[triangleIndex] = (ushort)triangle.VertexIndex1;
 			triangles[triangleIndex + 1] = (ushort)triangle.VertexIndex2;
 			triangles[triangleIndex + 2] = (ushort)triangle.VertexIndex3;

@@ -17,10 +17,10 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 	public class TerrainRenderer : MonoBehaviour
 	{
 		[SerializeField]
-		private Material Material;
+		private Terrain Terrain;
 
 		[SerializeField]
-		private Terrain Terrain;
+		private TileTypesSO TileTypes;
 
 		[Header("Listening channels")]
 		[SerializeField]
@@ -85,7 +85,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 					Chunk = chunk,
 					Grid = Terrain.Grid,
 					MaxHeight = Terrain.MaxHeight,
-					HeightStep = Terrain.HeightStep
+					HeightStep = Terrain.HeightStep,
+					TileTypeCount = (byte) TileTypes.TileTypes.Length
 				};
 
 				jobPair.Schedule();
@@ -117,7 +118,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			foreach (var chunk in _chunkCache)
 			{
 				var matrix = transform.localToWorldMatrix;
-				chunk.Render(matrix, Material, gameObject.layer);
+				chunk.Render(matrix, TileTypes, gameObject.layer);
 			}
 		}
 
@@ -132,12 +133,13 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			public Grid Grid { get; set; }
 			public byte MaxHeight { get; set; }
 			public float HeightStep { get; set; }
+			public byte TileTypeCount { get; set; }
 
 			public void Schedule()
 			{
 				_meshUpdater = Chunk.AcquireMeshUpdater();
-				_surfaceMeshUpdateData = new(Allocator.Persistent);
-				_wallMeshUpdateData = new(Allocator.Persistent);
+				_surfaceMeshUpdateData = new(TileTypeCount, Allocator.Persistent);
+				_wallMeshUpdateData = new(TileTypeCount, Allocator.Persistent);
 
 				var surfaceUpdateJobHandle = ScheduleSurfaceUpdate();
 				var wallUpdateJobHandle = ScheduleWallUpdate();
