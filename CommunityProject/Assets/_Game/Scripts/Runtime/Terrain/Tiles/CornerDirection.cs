@@ -1,4 +1,4 @@
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {
 	public enum CornerDirection : byte
 	{

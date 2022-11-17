@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
 	[BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
 	public struct WriteChunkMeshJob : IJob

@@ -1,8 +1,8 @@
-using BoundfoxStudios.CommunityProject.Terrain.Core;
-using BoundfoxStudios.CommunityProject.Terrain.Core.ScriptableObjects;
+using BoundfoxStudios.CommunityProject.Terrain.Chunks;
+using BoundfoxStudios.CommunityProject.Terrain.ScriptableObjects;
 using Unity.Collections;
 using UnityEngine;
-using Grid = BoundfoxStudios.CommunityProject.Terrain.Core.Grid;
+using Grid = BoundfoxStudios.CommunityProject.Terrain.Tiles.Grid;
 
 namespace BoundfoxStudios.CommunityProject.Terrain
 {
@@ -35,12 +35,12 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 		private Grid _grid;
 		public Grid Grid => _grid;
-		internal Chunks Chunks;
+		internal ChunkList ChunkList;
 
 		private void Awake()
 		{
 			_grid = new(Width, Length, MaxHeight, Allocator.Persistent);
-			Chunks = new(new(Width, Length), ChunkSize);
+			ChunkList = new(new(Width, Length), ChunkSize);
 		}
 
 		private void Start()
@@ -48,7 +48,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			// TODO: For Testing
 			UpdateChunksEventChannel.Raise(new()
 			{
-				Chunks = Chunks
+				Chunks = ChunkList.Chunks
 			});
 		}
 

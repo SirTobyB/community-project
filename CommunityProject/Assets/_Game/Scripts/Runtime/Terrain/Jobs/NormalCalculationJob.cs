@@ -2,7 +2,7 @@ using Unity.Burst;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
 	[BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
 	public struct NormalCalculationJob : IJob

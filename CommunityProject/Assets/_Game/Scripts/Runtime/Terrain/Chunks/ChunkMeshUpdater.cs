@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 {
 	public readonly struct ChunkMeshUpdater : IDisposable
 	{

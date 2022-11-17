@@ -1,9 +1,8 @@
 using System;
 using Unity.Collections;
 using Unity.Mathematics;
-using UnityEngine;
 
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {
 	public struct Grid : IDisposable
 	{
@@ -24,8 +23,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 
 		private NativeArray<TileData> _tiles;
 		private IntBounds _bounds;
-
-		public IntBounds B => _bounds;
 
 		public Grid(int width, int length, byte maxHeight, Allocator allocator)
 		{
@@ -69,6 +66,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 		{
 			var defaultHeight = (byte) (MaxHeight / 2);
 
+			// TODO: Remove test data
 			if (position.Equals(new(1,1)))
 			{
 				return new((byte) (defaultHeight + 1), (byte)(defaultHeight + 1), defaultHeight, defaultHeight);

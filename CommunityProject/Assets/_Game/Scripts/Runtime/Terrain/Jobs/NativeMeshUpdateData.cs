@@ -1,7 +1,7 @@
 using System;
 using Unity.Collections;
 
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
 	public struct NativeMeshUpdateData : IDisposable
 	{

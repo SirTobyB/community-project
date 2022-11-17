@@ -1,7 +1,6 @@
 using Unity.Mathematics;
-using UnityEngine;
 
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {
 	public struct Tile
 	{

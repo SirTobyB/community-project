@@ -1,6 +1,4 @@
-using Unity.Mathematics;
-
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
 	public struct Triangle
 	{

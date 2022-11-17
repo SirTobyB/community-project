@@ -1,4 +1,4 @@
-using BoundfoxStudios.CommunityProject.Terrain.Core;
+using BoundfoxStudios.CommunityProject.Terrain.Tiles;
 using FluentAssertions;
 using NUnit.Framework;
 using Unity.Collections;

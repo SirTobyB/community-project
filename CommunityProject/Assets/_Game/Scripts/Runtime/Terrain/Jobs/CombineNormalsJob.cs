@@ -1,11 +1,9 @@
-using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
 
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
 	[BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
 	public struct CombineNormalsJob : IJob
@@ -70,14 +68,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Core
 
 
 			bucket.Dispose();
-		}
-
-		private float3 CalculateNormal(float3 pointA, float3 pointB, float3 pointC)
-		{
-			var sideA = pointB - pointA;
-			var sideB = pointC - pointA;
-
-			return math.normalize(math.cross(sideA, sideB));
 		}
 	}
 }

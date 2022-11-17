@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using BoundfoxStudios.CommunityProject.Terrain.Core;
-using BoundfoxStudios.CommunityProject.Terrain.Core.ScriptableObjects;
+using BoundfoxStudios.CommunityProject.Terrain.Chunks;
+using BoundfoxStudios.CommunityProject.Terrain.Jobs;
+using BoundfoxStudios.CommunityProject.Terrain.ScriptableObjects;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Profiling;
 using Debug = UnityEngine.Debug;
-using Grid = BoundfoxStudios.CommunityProject.Terrain.Core.Grid;
+using Grid = BoundfoxStudios.CommunityProject.Terrain.Tiles.Grid;
 
 namespace BoundfoxStudios.CommunityProject.Terrain
 {
@@ -72,8 +73,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
-			Debug.Log("Updating Chunks");
-			Profiler.BeginSample("Updating Chunks");
+			Debug.Log("Updating ChunkList");
+			Profiler.BeginSample("Updating ChunkList");
 
 			var chunkJobPairs = new List<ChunkJobPair>();
 

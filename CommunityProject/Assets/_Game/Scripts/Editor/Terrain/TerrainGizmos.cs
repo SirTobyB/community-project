@@ -1,4 +1,4 @@
-using BoundfoxStudios.CommunityProject.Terrain.Core;
+using BoundfoxStudios.CommunityProject.Terrain.Chunks;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ namespace BoundfoxStudios.CommunityProject.Editor.Terrain
 				return;
 			}
 
-			foreach (var chunk in terrain.Chunks)
+			foreach (var chunk in terrain.ChunkList)
 			{
 				DrawChunk(chunk);
 			}

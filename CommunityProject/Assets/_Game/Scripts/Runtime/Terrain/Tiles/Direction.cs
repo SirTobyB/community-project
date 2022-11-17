@@ -1,7 +1,7 @@
 using System;
 using Unity.Mathematics;
 
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {
 	public struct Direction
 	{

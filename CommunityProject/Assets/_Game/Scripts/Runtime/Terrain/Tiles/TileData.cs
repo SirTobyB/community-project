@@ -1,6 +1,6 @@
 using System;
 
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {
 	public struct TileData
 	{

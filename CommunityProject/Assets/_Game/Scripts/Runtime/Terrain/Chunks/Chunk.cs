@@ -1,7 +1,8 @@
+using BoundfoxStudios.CommunityProject.Terrain.Tiles;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace BoundfoxStudios.CommunityProject.Terrain.Core
+namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 {
 	public class Chunk
 	{
