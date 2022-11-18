@@ -91,10 +91,10 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			var southTileType = tile.GetTileType(Direction.South);
 			var westTileType = tile.GetTileType(Direction.West);
 
-			MeshUpdateData.AddToTriangles(northTileType, centerVertexIndex, northWestVertexIndex, northEastVertexIndex);
-			MeshUpdateData.AddToTriangles(eastTileType, centerVertexIndex, northEastVertexIndex, southEastVertexIndex);
-			MeshUpdateData.AddToTriangles(southTileType, centerVertexIndex, southEastVertexIndex, southWestVertexIndex);
-			MeshUpdateData.AddToTriangles(westTileType, centerVertexIndex, southWestVertexIndex, northWestVertexIndex);
+			MeshUpdateData.AddTriangle(northTileType, centerVertexIndex, northWestVertexIndex, northEastVertexIndex);
+			MeshUpdateData.AddTriangle(eastTileType, centerVertexIndex, northEastVertexIndex, southEastVertexIndex);
+			MeshUpdateData.AddTriangle(southTileType, centerVertexIndex, southEastVertexIndex, southWestVertexIndex);
+			MeshUpdateData.AddTriangle(westTileType, centerVertexIndex, southWestVertexIndex, northWestVertexIndex);
 		}
 	}
 }

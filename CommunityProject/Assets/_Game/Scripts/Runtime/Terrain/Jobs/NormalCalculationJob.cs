@@ -14,7 +14,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			var vertices = MeshUpdateData.Vertices;
 
 			// TODO: refactor
-			foreach (var kvp in MeshUpdateData.Triangles)
+			foreach (var kvp in MeshUpdateData.TileTypeTriangles)
 			{
 				foreach (var triangle in kvp.Value)
 				{

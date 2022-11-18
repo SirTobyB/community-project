@@ -6,24 +6,24 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
 	public struct NativeMeshUpdateData : IDisposable
 	{
-		public NativeHashMap<byte, UnsafeList<Triangle>> Triangles { get; }
+		public NativeHashMap<byte, UnsafeList<Triangle>> TileTypeTriangles { get; }
 		public NativeList<Vertex> Vertices { get; }
 
 		public NativeMeshUpdateData(byte tileTypeCount, Allocator allocator)
 		{
 			Vertices = new(allocator);
 
-			Triangles = new(tileTypeCount, allocator);
+			TileTypeTriangles = new(tileTypeCount, allocator);
 
 			for (var i = 0; i < tileTypeCount; i++)
 			{
-				Triangles.Add((byte)i, new(0, allocator));
+				TileTypeTriangles.Add((byte)i, new(0, allocator));
 			}
 		}
 
-		public void AddToTriangles(byte tileType, int vertexIndex1, int vertexIndex2, int vertexIndex3)
+		public void AddTriangle(byte tileType, int vertexIndex1, int vertexIndex2, int vertexIndex3)
 		{
-			var triangleBucket = Triangles;
+			var triangleBucket = TileTypeTriangles;
 			var triangles = triangleBucket[tileType];
 			triangles.Add(new(tileType, vertexIndex1, vertexIndex2, vertexIndex3));
 			triangleBucket[tileType] = triangles;
@@ -31,12 +31,12 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 
 		public void Dispose()
 		{
-			foreach (var kvp in Triangles)
+			foreach (var kvp in TileTypeTriangles)
 			{
 				kvp.Value.Dispose();
 			}
 
-			Triangles.Dispose();
+			TileTypeTriangles.Dispose();
 			Vertices.Dispose();
 		}
 	}

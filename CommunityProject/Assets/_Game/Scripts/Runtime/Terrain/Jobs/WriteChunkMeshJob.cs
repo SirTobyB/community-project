@@ -52,13 +52,13 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			var triangleIndexCount = CalculateTriangleIndexCount();
 			MeshData.SetIndexBufferParams(triangleIndexCount, IndexFormat.UInt16);
 
-			var subMeshCount = MeshUpdateData.Triangles.Count();
+			var subMeshCount = MeshUpdateData.TileTypeTriangles.Count();
 			MeshData.subMeshCount = subMeshCount;
 
 			var previousStartIndex = 0;
 			for (var i = 0; i < subMeshCount; i++)
 			{
-				var triangleBucket = MeshUpdateData.Triangles[(byte)i];
+				var triangleBucket = MeshUpdateData.TileTypeTriangles[(byte)i];
 
 				var subMeshTriangleStartIndex = previousStartIndex;
 				var subMeshTriangleIndexCount = CalculateTriangleIndexCount(triangleBucket);
@@ -78,7 +78,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 		{
 			var result = 0;
 
-			foreach (var kvp in MeshUpdateData.Triangles)
+			foreach (var kvp in MeshUpdateData.TileTypeTriangles)
 			{
 				result += CalculateTriangleIndexCount(kvp.Value);
 			}
@@ -97,7 +97,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			var triangles = MeshData.GetIndexData<ushort>();
 			var index = 0;
 
-			foreach (var kvp in MeshUpdateData.Triangles)
+			foreach (var kvp in MeshUpdateData.TileTypeTriangles)
 			{
 				for (var i = 0; i < kvp.Value.Length; i++)
 				{
@@ -132,7 +132,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 
 		private void WriteTriangle(byte tileType, int i, int index, NativeArray<ushort> triangles)
 		{
-			var triangle2 = MeshUpdateData.Triangles[tileType];
+			var triangle2 = MeshUpdateData.TileTypeTriangles[tileType];
 			var triangle = triangle2[i];
 
 			var triangleIndex = index * 3;
