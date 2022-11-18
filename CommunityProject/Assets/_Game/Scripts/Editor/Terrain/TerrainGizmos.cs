@@ -1,3 +1,4 @@
+using BoundfoxStudios.CommunityProject.Terrain;
 using BoundfoxStudios.CommunityProject.Terrain.Chunks;
 using UnityEditor;
 using UnityEngine;
@@ -6,31 +7,42 @@ namespace BoundfoxStudios.CommunityProject.Editor.Terrain
 {
 	public static class TerrainGizmos
 	{
-		[DrawGizmo(GizmoType.Selected, typeof(CommunityProject.Terrain.Terrain))]
-		private static void DrawChunksGizmos(CommunityProject.Terrain.Terrain terrain, GizmoType gizmoType)
+		[DrawGizmo(GizmoType.Selected, typeof(TerrainDebugger))]
+		private static void DrawChunksGizmos(TerrainDebugger terrainDebugger, GizmoType gizmoType)
 		{
 			if (!EditorApplication.isPlaying)
 			{
 				return;
 			}
 
-			foreach (var chunk in terrain.ChunkList)
+			foreach (var chunk in terrainDebugger.Terrain.ChunkList)
 			{
-				DrawChunk(chunk);
+				DrawChunk(chunk, terrainDebugger.Terrain.MaxHeight, terrainDebugger.Options);
 			}
 		}
 
-		private static void DrawChunk(Chunk chunk)
+		private static void DrawChunk(Chunk chunk, byte maxHeight, TerrainDebugger.DebuggerOptions options)
 		{
 			Gizmos.color = Color.yellow;
 
-			// TODO: Height of a chunk?
-			var center = new Vector3(chunk.Position.x + chunk.Bounds.Size.x / 2, 5, chunk.Position.y + chunk.Bounds.Size.y / 2);
-			var size = new Vector3(chunk.Bounds.Size.x, 10, chunk.Bounds.Size.y);
+			if (options.ShowChunkBoundaries)
+			{
+				DrawChunkBoundary(chunk, maxHeight);
+			}
+
+			if (options.ShowNormals)
+			{
+				DrawChunkNormals(chunk);
+			}
+		}
+
+		private static void DrawChunkBoundary(Chunk chunk, byte maxHeight)
+		{
+			var center = new Vector3(chunk.Position.x + chunk.Bounds.Size.x / 2, maxHeight / 2f,
+				chunk.Position.y + chunk.Bounds.Size.y / 2);
+			var size = new Vector3(chunk.Bounds.Size.x, maxHeight, chunk.Bounds.Size.y);
 
 			Gizmos.DrawWireCube(center, size);
-
-			DrawChunkNormals(chunk);
 		}
 
 		private static void DrawChunkNormals(Chunk chunk)

@@ -6,6 +6,7 @@ using Grid = BoundfoxStudios.CommunityProject.Terrain.Tiles.Grid;
 
 namespace BoundfoxStudios.CommunityProject.Terrain
 {
+	[AddComponentMenu(Constants.MenuNames.Terrain + "/" + nameof(Terrain))]
 	public class Terrain : MonoBehaviour
 	{
 		[Header("Settings")]
