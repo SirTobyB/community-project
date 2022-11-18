@@ -78,7 +78,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 				AddNewVertexToVertices(ref tile, corner.NeighborClockwise, new(0, 1));
 				AddNewVertexToVertices(ref tile, corner, new(1, 1));
 				AddNewVertexToVertices(ref neighbor, neighborLeft, new(1, 0));
-				MeshUpdateData.AddTriangle(tileType, vertexIndex, vertexIndex + 1, vertexIndex + 2);
+				MeshUpdateData.Triangles.Add(new (tileType, vertexIndex, vertexIndex + 1, vertexIndex + 2));
 			}
 			if (needsTriangle2)
 			{
@@ -94,7 +94,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 					AddNewVertexToVertices(ref tile, corner, new(1, 1));
 				}
 				AddNewVertexToVertices(ref neighbor, neighborRight, new(0, 0));
-				MeshUpdateData.AddTriangle(tileType, vertexIndex, vertexIndex +1, vertexIndex + 2);
+				MeshUpdateData.Triangles.Add(new (tileType, vertexIndex, vertexIndex +1, vertexIndex + 2));
 			}
 		}
 

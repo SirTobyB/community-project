@@ -58,7 +58,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			var southEastVertexIndex = vertexIndex + 3;
 			var southWestVertexIndex = vertexIndex + 4;
 
-			// TODO: We possibly need to calculate the normals manually, if later mesh.RecalculateNormals does not help
 			var vertex = new Vertex();
 
 			// Vertex: Center
@@ -91,10 +90,10 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			var southTileType = tile.GetTileType(Direction.South);
 			var westTileType = tile.GetTileType(Direction.West);
 
-			MeshUpdateData.AddTriangle(northTileType, centerVertexIndex, northWestVertexIndex, northEastVertexIndex);
-			MeshUpdateData.AddTriangle(eastTileType, centerVertexIndex, northEastVertexIndex, southEastVertexIndex);
-			MeshUpdateData.AddTriangle(southTileType, centerVertexIndex, southEastVertexIndex, southWestVertexIndex);
-			MeshUpdateData.AddTriangle(westTileType, centerVertexIndex, southWestVertexIndex, northWestVertexIndex);
+			MeshUpdateData.Triangles.Add(new (northTileType, centerVertexIndex, northWestVertexIndex, northEastVertexIndex));
+			MeshUpdateData.Triangles.Add(new (eastTileType, centerVertexIndex, northEastVertexIndex, southEastVertexIndex));
+			MeshUpdateData.Triangles.Add(new (southTileType, centerVertexIndex, southEastVertexIndex, southWestVertexIndex));
+			MeshUpdateData.Triangles.Add(new (westTileType, centerVertexIndex, southWestVertexIndex, northWestVertexIndex));
 		}
 	}
 }

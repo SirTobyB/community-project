@@ -1,8 +1,6 @@
-using System.Linq;
 using System.Runtime.InteropServices;
 using Unity.Burst;
 using Unity.Collections;
-using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -21,6 +19,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 		[ReadOnly]
 		public Bounds Bounds;
 
+		private const int VerticesPerTriangle = 3;
+
 		[StructLayout(LayoutKind.Sequential)]
 		private struct StreamVertex
 		{
@@ -33,7 +33,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 		{
 			Initialize();
 			WriteVertices();
-			WriteTriangles();
+			WriteSubMeshes();
 		}
 
 		private void Initialize()
@@ -49,74 +49,119 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			MeshData.SetVertexBufferParams(vertexCount, descriptor);
 			descriptor.Dispose();
 
-			var triangleIndexCount = CalculateTriangleIndexCount();
+			var triangleIndexCount = VerticesPerTriangle * MeshUpdateData.Triangles.Length;
 			MeshData.SetIndexBufferParams(triangleIndexCount, IndexFormat.UInt16);
+		}
 
-			var subMeshCount = MeshUpdateData.TileTypeTriangles.Count();
+		private void WriteSubMeshes()
+		{
+			var subMeshCount = MeshUpdateData.SubMeshCount;
 			MeshData.subMeshCount = subMeshCount;
+
+			var indexBufferStream = MeshData.GetIndexData<ushort>();
 
 			var previousStartIndex = 0;
 			for (var i = 0; i < subMeshCount; i++)
 			{
-				var triangleBucket = MeshUpdateData.TileTypeTriangles[(byte)i];
+				var triangles = GetTileTypeTriangles((byte)i);
 
 				var subMeshTriangleStartIndex = previousStartIndex;
-				var subMeshTriangleIndexCount = CalculateTriangleIndexCount(triangleBucket);
-				var subMeshVertexCount = subMeshTriangleIndexCount / 3;
+				var subMeshTriangleIndexCount = VerticesPerTriangle * triangles.Length;
+
+				var (firstVertex, vertexCount) = GetFirstIndexAndVertexCount(ref triangles);
 
 				MeshData.SetSubMesh(i, new(subMeshTriangleStartIndex, subMeshTriangleIndexCount)
 				{
-					vertexCount = subMeshVertexCount,
-					bounds = Bounds,
+					firstVertex = firstVertex,
+					vertexCount = vertexCount,
+					bounds = Bounds
 				}, MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);
+
+				WriteTriangles(ref triangles, ref indexBufferStream, previousStartIndex);
+
+				triangles.Dispose();
 
 				previousStartIndex += subMeshTriangleIndexCount;
 			}
 		}
 
-		private int CalculateTriangleIndexCount()
+		private (int FirstVertex, int VertexCount) GetFirstIndexAndVertexCount(ref NativeList<Triangle> triangles)
 		{
-			var result = 0;
-
-			foreach (var kvp in MeshUpdateData.TileTypeTriangles)
+			if (triangles.IsEmpty)
 			{
-				result += CalculateTriangleIndexCount(kvp.Value);
+				return (0, 0);
+			}
+
+			var (minimumVertexIndex, maximumVertexIndex) = GetMinimumAndMaximumVertexIndex(ref triangles);
+
+			return (
+				minimumVertexIndex,
+				maximumVertexIndex - minimumVertexIndex + 1
+			);
+		}
+
+		private (int MinimumVertexIndex, int MaximumVertexIndex) GetMinimumAndMaximumVertexIndex(
+			ref NativeList<Triangle> triangles)
+		{
+			var minimum = int.MaxValue;
+			var maximum = int.MinValue;
+
+			for (var index = 0; index < triangles.Length; index++)
+			{
+				var triangle = triangles[index];
+
+				var (triangleMinimum, triangleMaximum) = GetMinimumAndMaximumTriangleVertexIndex(ref triangle);
+
+				minimum = math.min(minimum, triangleMinimum);
+				maximum = math.max(maximum, triangleMaximum);
+			}
+
+			return (minimum, maximum);
+		}
+
+		private (int MinimumVertexIndex, int MaximumVertexIndex) GetMinimumAndMaximumTriangleVertexIndex(
+			ref Triangle triangle)
+		{
+			var minimum = int.MaxValue;
+			var maximum = int.MinValue;
+
+			minimum = math.min(minimum, triangle.VertexIndex1);
+			minimum = math.min(minimum, triangle.VertexIndex2);
+			minimum = math.min(minimum, triangle.VertexIndex3);
+
+			maximum = math.max(maximum, triangle.VertexIndex1);
+			maximum = math.max(maximum, triangle.VertexIndex2);
+			maximum = math.max(maximum, triangle.VertexIndex3);
+
+			return (minimum, maximum);
+		}
+
+		private NativeList<Triangle> GetTileTypeTriangles(byte tileType)
+		{
+			var result = new NativeList<Triangle>(Allocator.Temp);
+
+			foreach (var triangle in MeshUpdateData.Triangles)
+			{
+				if (triangle.TileType == tileType)
+				{
+					result.Add(triangle);
+				}
 			}
 
 			return result;
 		}
 
-		private int CalculateTriangleIndexCount(UnsafeList<Triangle> triangles)
-		{
-			const int verticesPerTriangle = 3;
-			return triangles.Length * verticesPerTriangle;
-		}
-
-		private void WriteTriangles()
-		{
-			var triangles = MeshData.GetIndexData<ushort>();
-			var index = 0;
-
-			foreach (var kvp in MeshUpdateData.TileTypeTriangles)
-			{
-				for (var i = 0; i < kvp.Value.Length; i++)
-				{
-					WriteTriangle(kvp.Key, i, index, triangles);
-					index++;
-				}
-			}
-		}
-
 		private void WriteVertices()
 		{
 			var vertices = MeshData.GetVertexData<StreamVertex>();
+
 			for (var i = 0; i < MeshUpdateData.Vertices.Length; i++)
 			{
-				WriteVertex(i, vertices);
+				WriteVertex(i, ref vertices);
 			}
 		}
 
-		private void WriteVertex(int i, NativeArray<StreamVertex> vertices)
+		private void WriteVertex(int i, ref NativeArray<StreamVertex> vertices)
 		{
 			var vertex = MeshUpdateData.Vertices[i];
 
@@ -130,15 +175,28 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			vertices[i] = streamVertex;
 		}
 
-		private void WriteTriangle(byte tileType, int i, int index, NativeArray<ushort> triangles)
+		private void WriteTriangles(ref NativeList<Triangle> triangles,
+			ref NativeArray<ushort> indexBufferStream,
+			int indexBufferStreamOffset
+		)
 		{
-			var triangle2 = MeshUpdateData.TileTypeTriangles[tileType];
-			var triangle = triangle2[i];
+			for (var index = 0; index < triangles.Length; index++)
+			{
+				WriteTriangle(index, ref triangles, ref indexBufferStream, indexBufferStreamOffset);
+			}
+		}
 
-			var triangleIndex = index * 3;
-			triangles[triangleIndex] = (ushort)triangle.VertexIndex1;
-			triangles[triangleIndex + 1] = (ushort)triangle.VertexIndex2;
-			triangles[triangleIndex + 2] = (ushort)triangle.VertexIndex3;
+		private void WriteTriangle(int index,
+			ref NativeList<Triangle> triangles,
+			ref NativeArray<ushort> indexBufferStream,
+			int indexBufferStreamOffset)
+		{
+			var triangle = triangles[index];
+
+			var triangleIndex = indexBufferStreamOffset + index * 3;
+			indexBufferStream[triangleIndex] = (ushort)triangle.VertexIndex1;
+			indexBufferStream[triangleIndex + 1] = (ushort)triangle.VertexIndex2;
+			indexBufferStream[triangleIndex + 2] = (ushort)triangle.VertexIndex3;
 		}
 	}
 }
