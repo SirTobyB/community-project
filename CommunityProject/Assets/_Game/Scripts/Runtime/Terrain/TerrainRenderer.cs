@@ -166,7 +166,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 				};
 				var combineNormalsJobHandle = combineNormalsJob.Schedule(surfaceNormalCalculationJobHandle);
 
-				var meshWriteJob = new WriteChunkMeshJob
+				var meshWriteJob = new WriteMeshJob
 				{
 					Bounds = bounds,
 					MeshData = _meshUpdater.SurfaceMeshData,
@@ -193,7 +193,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 				};
 				var wallNormalCalculationJobHandle = wallNormalCalculationJob.Schedule(wallChunkJobHandle);
 
-				var meshWriteJob = new WriteChunkMeshJob
+				var meshWriteJob = new WriteMeshJob
 				{
 					Bounds = bounds,
 					MeshData = _meshUpdater.WallMeshData,

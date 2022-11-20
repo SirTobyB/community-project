@@ -9,7 +9,7 @@ using UnityEngine.Rendering;
 namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
 	[BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
-	public struct WriteChunkMeshJob : IJob
+	public struct WriteMeshJob : IJob
 	{
 		public Mesh.MeshData MeshData;
 

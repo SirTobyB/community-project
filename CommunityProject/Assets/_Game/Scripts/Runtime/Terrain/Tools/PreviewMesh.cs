@@ -45,7 +45,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tools
 			};
 			var normalCalculationJobHandle = normalCalculationJob.Schedule(surfaceJobHandle);
 
-			var writeChunkMeshJob = new WriteChunkMeshJob()
+			var writeMeshJob = new WriteMeshJob()
 			{
 				Bounds = new(new(bounds.Center.x, terrain.MaxHeight / 2f, bounds.Center.y),
 					new(bounds.Size.x, terrain.MaxHeight, bounds.Size.y)),
@@ -53,7 +53,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tools
 				MeshUpdateData = meshUpdateData,
 				VertexOffset = new(0, _heightOffset, 0)
 			};
-			var writeChunkMeshJobHandle = writeChunkMeshJob.Schedule(normalCalculationJobHandle);
+			var writeChunkMeshJobHandle = writeMeshJob.Schedule(normalCalculationJobHandle);
 
 			writeChunkMeshJobHandle.Complete();
 
