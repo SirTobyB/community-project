@@ -57,7 +57,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 				CreateCombineInstances(chunk.SurfaceMesh)
 					.Concat(CreateCombineInstances(chunk.WallMesh))
 					.ToArray(),
-				true, false, false);
+				true, true, false);
 
 			meshColllider.sharedMesh = mesh;
 		}
@@ -70,6 +70,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			{
 				result[i] = new()
 				{
+					transform = transform.localToWorldMatrix,
 					mesh = mesh,
 					subMeshIndex = i
 				};

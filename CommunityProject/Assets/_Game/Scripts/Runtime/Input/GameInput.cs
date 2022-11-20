@@ -28,8 +28,52 @@ namespace BoundfoxStudios.CommunityProject.Input
         {
             ""name"": ""Gameplay"",
             ""id"": ""a364189b-7ccc-4ede-a56e-3f9935c00534"",
-            ""actions"": [],
-            ""bindings"": []
+            ""actions"": [
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""Button"",
+                    ""id"": ""3449a04b-2444-4d8f-9d63-ee77b940e99a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""ClickPosition"",
+                    ""id"": ""36a06df4-16b5-4138-b6f5-f7562902f9dc"",
+                    ""path"": ""OneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""modifier"",
+                    ""id"": ""313d40dd-bde6-48ad-b772-a84a27b8cf21"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""binding"",
+                    ""id"": ""71d6f57d-c83a-4458-a6a9-334eacca5360"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         },
         {
             ""name"": ""UI"",
@@ -569,6 +613,7 @@ namespace BoundfoxStudios.CommunityProject.Input
 }");
             // Gameplay
             m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
+            m_Gameplay_Click = m_Gameplay.FindAction("Click", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -640,10 +685,12 @@ namespace BoundfoxStudios.CommunityProject.Input
         // Gameplay
         private readonly InputActionMap m_Gameplay;
         private IGameplayActions m_GameplayActionsCallbackInterface;
+        private readonly InputAction m_Gameplay_Click;
         public struct GameplayActions
         {
             private @GameInput m_Wrapper;
             public GameplayActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Click => m_Wrapper.m_Gameplay_Click;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -653,10 +700,16 @@ namespace BoundfoxStudios.CommunityProject.Input
             {
                 if (m_Wrapper.m_GameplayActionsCallbackInterface != null)
                 {
+                    @Click.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnClick;
+                    @Click.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnClick;
+                    @Click.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnClick;
                 }
                 m_Wrapper.m_GameplayActionsCallbackInterface = instance;
                 if (instance != null)
                 {
+                    @Click.started += instance.OnClick;
+                    @Click.performed += instance.OnClick;
+                    @Click.canceled += instance.OnClick;
                 }
             }
         }
@@ -777,6 +830,7 @@ namespace BoundfoxStudios.CommunityProject.Input
         }
         public interface IGameplayActions
         {
+            void OnClick(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

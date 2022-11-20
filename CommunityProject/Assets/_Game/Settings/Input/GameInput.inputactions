@@ -4,8 +4,52 @@
         {
             "name": "Gameplay",
             "id": "a364189b-7ccc-4ede-a56e-3f9935c00534",
-            "actions": [],
-            "bindings": []
+            "actions": [
+                {
+                    "name": "Click",
+                    "type": "Button",
+                    "id": "3449a04b-2444-4d8f-9d63-ee77b940e99a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "ClickPosition",
+                    "id": "36a06df4-16b5-4138-b6f5-f7562902f9dc",
+                    "path": "OneModifier",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "313d40dd-bde6-48ad-b772-a84a27b8cf21",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "71d6f57d-c83a-4458-a6a9-334eacca5360",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "Click",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
         },
         {
             "name": "UI",

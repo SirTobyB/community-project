@@ -1,6 +1,7 @@
 using System;
 using Unity.Collections;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {
@@ -108,5 +109,11 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 		}
 
 		public readonly bool IsInBounds(int2 position) => _bounds.Contains(position);
+
+		/// <summary>
+		/// Since the grid does not have any information about a local position, it always assumes
+		/// that the worldPosition is from origin.
+		/// </summary>
+		public static int2 WorldToTilePosition(float3 worldPosition) => new(worldPosition.xz);
 	}
 }
