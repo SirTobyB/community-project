@@ -6,6 +6,9 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 	[AddComponentMenu(Constants.MenuNames.Terrain + "/" + nameof(TerrainDebugger))]
 	public class TerrainDebugger : MonoBehaviour
 	{
+		public Terrain Terrain;
+		public DebuggerOptions Options;
+
 		[Serializable]
 		public class DebuggerOptions
 		{
@@ -14,8 +17,5 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			[Tooltip("Careful, showing normals on large terrains has a serious performance impact!")]
 			public bool ShowNormals;
 		}
-
-		public Terrain Terrain;
-		public DebuggerOptions Options;
 	}
 }

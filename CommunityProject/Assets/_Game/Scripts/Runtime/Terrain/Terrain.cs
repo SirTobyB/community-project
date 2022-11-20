@@ -1,5 +1,6 @@
+using System;
+using System.Collections.Generic;
 using BoundfoxStudios.CommunityProject.Terrain.Chunks;
-using BoundfoxStudios.CommunityProject.Terrain.ScriptableObjects;
 using Unity.Collections;
 using UnityEngine;
 using Grid = BoundfoxStudios.CommunityProject.Terrain.Tiles.Grid;
@@ -18,25 +19,22 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		[Min(32)]
 		private int Length = 64;
 
-		[field: SerializeField]
-		[field: Range(5, 15)]
-		public byte MaxHeight { get; private set; }
-
 		[SerializeField]
 		[Min(16)]
 		private int ChunkSize = 16;
 
-		[field:SerializeField]
-		[field:Min(0.5f)]
+		private Grid _grid;
+		internal ChunkList ChunkList;
+
+		[field: SerializeField]
+		[field: Range(5, 15)]
+		public byte MaxHeight { get; private set; }
+
+		[field: SerializeField]
+		[field: Min(0.5f)]
 		public float HeightStep { get; private set; } = 1;
 
-		[Header("Broadcasting channels")]
-		[SerializeField]
-		private UpdateChunksEventChannelSO UpdateChunksEventChannel;
-
-		private Grid _grid;
 		public Grid Grid => _grid;
-		internal ChunkList ChunkList;
 
 		private void Awake()
 		{
@@ -47,10 +45,12 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		private void Start()
 		{
 			// TODO: For Testing
-			UpdateChunksEventChannel.Raise(new()
-			{
-				Chunks = ChunkList.Chunks
-			});
+			UpdateChunks(ChunkList.Chunks);
+		}
+
+		private void OnDestroy()
+		{
+			_grid.Dispose();
 		}
 
 		private void OnValidate()
@@ -76,9 +76,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			}
 		}
 
-		private void OnDestroy()
-		{
-			_grid.Dispose();
-		}
+		public event Action<IReadOnlyCollection<Chunk>> UpdateChunks = delegate { };
 	}
 }

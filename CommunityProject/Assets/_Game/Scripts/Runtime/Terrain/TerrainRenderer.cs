@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using BoundfoxStudios.CommunityProject.Terrain.Chunks;
 using BoundfoxStudios.CommunityProject.Terrain.Jobs;
 using BoundfoxStudios.CommunityProject.Terrain.ScriptableObjects;
@@ -8,27 +7,27 @@ using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Profiling;
-using Debug = UnityEngine.Debug;
 using Grid = BoundfoxStudios.CommunityProject.Terrain.Tiles.Grid;
 
 namespace BoundfoxStudios.CommunityProject.Terrain
 {
+	[AddComponentMenu(Constants.MenuNames.Terrain + "/" + nameof(TerrainRenderer))]
 	[RequireComponent(typeof(Terrain))]
 	public class TerrainRenderer : MonoBehaviour
 	{
 		[SerializeField]
-		private Terrain Terrain;
-
-		[SerializeField]
 		private TileTypesSO TileTypes;
 
-		[Header("Listening channels")]
-		[SerializeField]
-		private UpdateChunksEventChannelSO UpdateChunksEventChannel;
+		private readonly List<Chunk> _chunkCache = new();
 
 		private readonly List<Chunk> _chunksToUpdate = new();
-		private readonly List<Chunk> _chunkCache = new();
-		private bool _hasUpdated = false;
+		private bool _hasUpdated;
+		private Terrain _terrain;
+
+		private void Awake()
+		{
+			_terrain = GetComponent<Terrain>();
+		}
 
 		private void LateUpdate()
 		{
@@ -38,17 +37,19 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 		private void OnEnable()
 		{
-			UpdateChunksEventChannel.Raised += MarkChunksDirty;
+			_terrain.UpdateChunks += MarkChunksDirty;
 		}
 
 		private void OnDisable()
 		{
-			UpdateChunksEventChannel.Raised -= MarkChunksDirty;
+			_terrain.UpdateChunks -= MarkChunksDirty;
 		}
 
-		private void MarkChunksDirty(UpdateChunksEventChannelSO.EventArgs args)
+		public event Action<IReadOnlyCollection<Chunk>> AfterUpdateChunks = delegate { };
+
+		private void MarkChunksDirty(IReadOnlyCollection<Chunk> chunks)
 		{
-			_chunksToUpdate.AddRange(args.Chunks);
+			_chunksToUpdate.AddRange(chunks);
 		}
 
 		private void UpdateDirtyChunks()
@@ -71,22 +72,19 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 			_hasUpdated = true;
 
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
-			Debug.Log("Updating ChunkList");
 			Profiler.BeginSample("Updating ChunkList");
 
 			var chunkJobPairs = new List<ChunkJobPair>();
 
 			foreach (var chunk in chunksToUpdate)
 			{
-				var jobPair = new ChunkJobPair()
+				var jobPair = new ChunkJobPair
 				{
 					Chunk = chunk,
-					Grid = Terrain.Grid,
-					MaxHeight = Terrain.MaxHeight,
-					HeightStep = Terrain.HeightStep,
-					TileTypeCount = (byte) TileTypes.TileTypes.Length
+					Grid = _terrain.Grid,
+					MaxHeight = _terrain.MaxHeight,
+					HeightStep = _terrain.HeightStep,
+					TileTypeCount = (byte)TileTypes.TileTypes.Length
 				};
 
 				jobPair.Schedule();
@@ -108,9 +106,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			}
 
 			Profiler.EndSample();
-			stopwatch.Stop();
 
-			Debug.Log($"Time to construct all chunks: {stopwatch.ElapsedMilliseconds} msec");
+			AfterUpdateChunks(chunksToUpdate);
 		}
 
 		private void RenderMeshes()
@@ -152,7 +149,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 			private JobHandle ScheduleSurfaceUpdate(Bounds bounds)
 			{
-				var surfaceChunkJob = new TerrainSurfaceChunkJob()
+				var surfaceChunkJob = new TerrainSurfaceChunkJob
 				{
 					MeshUpdateData = _surfaceMeshUpdateData,
 					Grid = Grid,
@@ -162,19 +159,19 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 				};
 				var surfaceChunkJobHandle = surfaceChunkJob.Schedule();
 
-				var surfaceNormalCalculationJob = new NormalCalculationJob()
+				var surfaceNormalCalculationJob = new NormalCalculationJob
 				{
 					MeshUpdateData = _surfaceMeshUpdateData
 				};
 				var surfaceNormalCalculationJobHandle = surfaceNormalCalculationJob.Schedule(surfaceChunkJobHandle);
 
-				var combineNormalsJob = new CombineNormalsJob()
+				var combineNormalsJob = new CombineNormalsJob
 				{
 					SurfaceMeshUpdateData = _surfaceMeshUpdateData
 				};
 				var combineNormalsJobHandle = combineNormalsJob.Schedule(surfaceNormalCalculationJobHandle);
 
-				var meshWriteJob = new WriteChunkMeshJob()
+				var meshWriteJob = new WriteChunkMeshJob
 				{
 					Bounds = bounds,
 					MeshData = _meshUpdater.SurfaceMeshData,
@@ -186,7 +183,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 			private JobHandle ScheduleWallUpdate(Bounds bounds)
 			{
-				var wallChunkJob = new TerrainWallChunkJob()
+				var wallChunkJob = new TerrainWallChunkJob
 				{
 					MeshUpdateData = _wallMeshUpdateData,
 					Grid = Grid,
@@ -196,13 +193,13 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 				};
 				var wallChunkJobHandle = wallChunkJob.Schedule();
 
-				var wallNormalCalculationJob = new NormalCalculationJob()
+				var wallNormalCalculationJob = new NormalCalculationJob
 				{
 					MeshUpdateData = _wallMeshUpdateData
 				};
 				var wallNormalCalculationJobHandle = wallNormalCalculationJob.Schedule(wallChunkJobHandle);
 
-				var meshWriteJob = new WriteChunkMeshJob()
+				var meshWriteJob = new WriteChunkMeshJob
 				{
 					Bounds = bounds,
 					MeshData = _meshUpdater.WallMeshData,
