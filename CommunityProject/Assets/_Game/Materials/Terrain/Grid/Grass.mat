@@ -109,11 +109,11 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
-    - _InnerLineWidth: 0
+    - _InnerLineWidth: 0.007
     - _LineThickness: 0.02
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _OuterLineWidth: 0
+    - _OuterLineWidth: 0.02
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
@@ -132,7 +132,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GridColor: {r: 1, g: 1, b: 1, a: 0.4392157}
     - _InnerGridColor: {r: 1, g: 1, b: 1, a: 0.16862746}
-    - _OuterGridColor: {r: 1, g: 1, b: 1, a: 1}
+    - _OuterGridColor: {r: 1, g: 1, b: 1, a: 0.38431373}
     - _Point_A: {r: 0.39, g: 0.09, b: 0, a: 0}
     - _Point_B: {r: 1.19, g: -2.03, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
