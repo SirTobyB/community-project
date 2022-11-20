@@ -11,6 +11,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.ScriptableObjects
 	{
 		public TileTypeSO[] TileTypes;
 
+		public byte Length => (byte)TileTypes.Length;
+
 		private Dictionary<byte, TileTypeSO> _tileTypeCache;
 
 		private void OnEnable()

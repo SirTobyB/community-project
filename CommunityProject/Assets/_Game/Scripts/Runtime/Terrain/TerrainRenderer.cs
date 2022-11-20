@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using BoundfoxStudios.CommunityProject.Terrain.Chunks;
 using BoundfoxStudios.CommunityProject.Terrain.Jobs;
-using BoundfoxStudios.CommunityProject.Terrain.ScriptableObjects;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
@@ -15,9 +14,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 	[RequireComponent(typeof(Terrain))]
 	public class TerrainRenderer : MonoBehaviour
 	{
-		[SerializeField]
-		private TileTypesSO TileTypes;
-
 		private readonly List<Chunk> _chunkCache = new();
 
 		private readonly List<Chunk> _chunksToUpdate = new();
@@ -84,7 +80,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 					Grid = _terrain.Grid,
 					MaxHeight = _terrain.MaxHeight,
 					HeightStep = _terrain.HeightStep,
-					TileTypeCount = (byte)TileTypes.TileTypes.Length
+					TileTypeCount = _terrain.TileTypes.Length
 				};
 
 				jobPair.Schedule();
@@ -115,7 +111,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			foreach (var chunk in _chunkCache)
 			{
 				var matrix = transform.localToWorldMatrix;
-				chunk.Render(matrix, TileTypes, gameObject.layer);
+				chunk.Render(matrix, _terrain.TileTypes, gameObject.layer);
 			}
 		}
 
@@ -154,7 +150,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 					MeshUpdateData = _surfaceMeshUpdateData,
 					Grid = Grid,
 					Bounds = Chunk.Bounds,
-					Position = Chunk.Position,
 					HeightStep = HeightStep
 				};
 				var surfaceChunkJobHandle = surfaceChunkJob.Schedule();
@@ -188,7 +183,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 					MeshUpdateData = _wallMeshUpdateData,
 					Grid = Grid,
 					Bounds = Chunk.Bounds,
-					Position = Chunk.Position,
 					HeightStep = HeightStep
 				};
 				var wallChunkJobHandle = wallChunkJob.Schedule();

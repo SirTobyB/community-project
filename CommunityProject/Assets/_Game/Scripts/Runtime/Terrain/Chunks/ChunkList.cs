@@ -20,8 +20,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 		private void GenerateChunks(int2 gridSize, int chunkSize, byte maxHeight)
 		{
 			var worldBounds = new IntBounds(new(0), gridSize);
-			var chunkBounds = new IntBounds(0, chunkSize);
-
 			var numberOfChunks = worldBounds.Size / chunkSize;
 
 			_chunks.Capacity = numberOfChunks.x * numberOfChunks.y;
@@ -32,7 +30,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 				{
 					var position = new int2(x * chunkSize, z * chunkSize);
 
-					_chunks.Add(new(position, chunkBounds, maxHeight));
+					_chunks.Add(new(new(position, position + chunkSize), maxHeight));
 				}
 			}
 		}

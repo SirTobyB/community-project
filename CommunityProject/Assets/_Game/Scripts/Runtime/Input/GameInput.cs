@@ -30,13 +30,22 @@ namespace BoundfoxStudios.CommunityProject.Input
             ""id"": ""a364189b-7ccc-4ede-a56e-3f9935c00534"",
             ""actions"": [
                 {
-                    ""name"": ""Click"",
+                    ""name"": ""Select"",
                     ""type"": ""Button"",
                     ""id"": ""3449a04b-2444-4d8f-9d63-ee77b940e99a"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PointerPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""8e9c2291-1cd7-443a-9544-91dffc19dd2c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -47,7 +56,7 @@ namespace BoundfoxStudios.CommunityProject.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Click"",
+                    ""action"": ""Select"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
@@ -58,7 +67,7 @@ namespace BoundfoxStudios.CommunityProject.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Click"",
+                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 },
@@ -69,9 +78,20 @@ namespace BoundfoxStudios.CommunityProject.Input
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Click"",
+                    ""action"": ""Select"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cedc751d-054a-4540-b63f-54208ca4e49f"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""PointerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -613,7 +633,8 @@ namespace BoundfoxStudios.CommunityProject.Input
 }");
             // Gameplay
             m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
-            m_Gameplay_Click = m_Gameplay.FindAction("Click", throwIfNotFound: true);
+            m_Gameplay_Select = m_Gameplay.FindAction("Select", throwIfNotFound: true);
+            m_Gameplay_PointerPosition = m_Gameplay.FindAction("PointerPosition", throwIfNotFound: true);
             // UI
             m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
             m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -685,12 +706,14 @@ namespace BoundfoxStudios.CommunityProject.Input
         // Gameplay
         private readonly InputActionMap m_Gameplay;
         private IGameplayActions m_GameplayActionsCallbackInterface;
-        private readonly InputAction m_Gameplay_Click;
+        private readonly InputAction m_Gameplay_Select;
+        private readonly InputAction m_Gameplay_PointerPosition;
         public struct GameplayActions
         {
             private @GameInput m_Wrapper;
             public GameplayActions(@GameInput wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Click => m_Wrapper.m_Gameplay_Click;
+            public InputAction @Select => m_Wrapper.m_Gameplay_Select;
+            public InputAction @PointerPosition => m_Wrapper.m_Gameplay_PointerPosition;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -700,16 +723,22 @@ namespace BoundfoxStudios.CommunityProject.Input
             {
                 if (m_Wrapper.m_GameplayActionsCallbackInterface != null)
                 {
-                    @Click.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnClick;
-                    @Click.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnClick;
-                    @Click.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnClick;
+                    @Select.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSelect;
+                    @Select.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSelect;
+                    @Select.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSelect;
+                    @PointerPosition.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPointerPosition;
+                    @PointerPosition.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPointerPosition;
+                    @PointerPosition.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPointerPosition;
                 }
                 m_Wrapper.m_GameplayActionsCallbackInterface = instance;
                 if (instance != null)
                 {
-                    @Click.started += instance.OnClick;
-                    @Click.performed += instance.OnClick;
-                    @Click.canceled += instance.OnClick;
+                    @Select.started += instance.OnSelect;
+                    @Select.performed += instance.OnSelect;
+                    @Select.canceled += instance.OnSelect;
+                    @PointerPosition.started += instance.OnPointerPosition;
+                    @PointerPosition.performed += instance.OnPointerPosition;
+                    @PointerPosition.canceled += instance.OnPointerPosition;
                 }
             }
         }
@@ -830,7 +859,8 @@ namespace BoundfoxStudios.CommunityProject.Input
         }
         public interface IGameplayActions
         {
-            void OnClick(InputAction.CallbackContext context);
+            void OnSelect(InputAction.CallbackContext context);
+            void OnPointerPosition(InputAction.CallbackContext context);
         }
         public interface IUIActions
         {

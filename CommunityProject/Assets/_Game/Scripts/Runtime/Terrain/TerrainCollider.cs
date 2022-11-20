@@ -46,10 +46,12 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 		private void UpdateCollider(Chunk chunk)
 		{
-			if (!_colliders.TryGetValue(chunk.Position, out var meshColllider))
+			var position = chunk.Bounds.Center;
+
+			if (!_colliders.TryGetValue(position, out var meshColllider))
 			{
 				meshColllider = _internalCollidersGameObject.AddComponent<MeshCollider>();
-				_colliders.Add(chunk.Position, meshColllider);
+				_colliders.Add(position, meshColllider);
 			}
 
 			var mesh = new Mesh();

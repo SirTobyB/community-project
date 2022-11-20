@@ -1,35 +1,65 @@
-using BoundfoxStudios.CommunityProject.Extensions;
+using BoundfoxStudios.CommunityProject.Input.ScriptableObjects;
+using BoundfoxStudios.CommunityProject.Terrain.Utils;
 using UnityEngine;
-using Grid = BoundfoxStudios.CommunityProject.Terrain.Tiles.Grid;
 
 namespace BoundfoxStudios.CommunityProject.Terrain
 {
 	[AddComponentMenu(Constants.MenuNames.Terrain + "/" + nameof(TerrainRaycaster))]
 	public class TerrainRaycaster : MonoBehaviour
 	{
-		public bool Raycast(Ray ray, out TerrainRaycastHit terrainRaycastHit, float maxRaycastDistance, LayerMask layerMask)
+		[SerializeField]
+		private Camera Camera;
+
+		[SerializeField]
+		private LayerMask TerrainLayerMask;
+
+		[SerializeField]
+		private float MaxRaycastDistance = 10;
+
+		[SerializeField]
+		private InputReaderSO InputReader;
+
+		private TerrainSelection _selection;
+
+		public delegate void SelectionChangeEventHandler(TerrainSelection selection);
+		public event SelectionChangeEventHandler SelectionChange = delegate { };
+
+		private void OnEnable()
 		{
-			terrainRaycastHit = default;
+			InputReader.Position += ReadPosition;
 
-			if (!Physics.Raycast(ray, out var hitInfo, maxRaycastDistance, layerMask))
-			{
-				return false;
-			}
-
-			if (!hitInfo.collider.TryGetComponentInParent<Terrain>(out var terrain))
-			{
-				return false;
-			}
-
-			var tilePosition = Grid.WorldToTilePosition(hitInfo.point - terrain.transform.position);
-			var tile = terrain.Grid.GetTile(tilePosition);
-
-			terrainRaycastHit = new()
-			{
-				Tile = tile,
-			};
-
-			return true;
+			// TODO: Remove, only for testing
+			InputReader.EnableGameplayInput();
 		}
+
+
+		private void OnDisable()
+		{
+			InputReader.Position -= ReadPosition;
+		}
+
+		private void ReadPosition(Vector2 position)
+		{
+			UpdateSelection(position);
+		}
+
+		private void UpdateSelection(Vector2 position)
+		{
+			var ray = Camera.ScreenPointToRay(position);
+
+			if (!TerrainRaycasterUtils.Raycast(ray, out var hitInfo, MaxRaycastDistance, TerrainLayerMask))
+			{
+				_selection.Clear();
+				OnSelectionChange();
+				return;
+			}
+
+			// TODO: Later, we can use the selected bounds to select more than one tile
+			_selection.Terrain = hitInfo.Terrain;
+			_selection.Bounds = new(hitInfo.Tile.Position, hitInfo.Tile.Position + 1);
+			OnSelectionChange();
+		}
+
+		private void OnSelectionChange() => SelectionChange(_selection);
 	}
 }

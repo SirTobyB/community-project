@@ -18,17 +18,19 @@ namespace BoundfoxStudios.CommunityProject.Editor.Terrain
 
 			foreach (var chunk in terrainDebugger.Terrain.ChunkList)
 			{
-				DrawChunk(chunk, terrainDebugger.Terrain.MaxHeight, terrainDebugger.Options);
+				DrawChunk(chunk, terrainDebugger.transform.position, terrainDebugger.Terrain.MaxHeight,
+					terrainDebugger.Options);
 			}
 		}
 
-		private static void DrawChunk(Chunk chunk, byte maxHeight, TerrainDebugger.DebuggerOptions options)
+		private static void DrawChunk(Chunk chunk, Vector3 terrainPosition, byte maxHeight,
+			TerrainDebugger.DebuggerOptions options)
 		{
 			Gizmos.color = Color.yellow;
 
 			if (options.ShowChunkBoundaries)
 			{
-				DrawChunkBoundary(chunk, maxHeight);
+				DrawChunkBoundary(chunk, terrainPosition, maxHeight);
 			}
 
 			if (options.ShowNormals)
@@ -37,10 +39,10 @@ namespace BoundfoxStudios.CommunityProject.Editor.Terrain
 			}
 		}
 
-		private static void DrawChunkBoundary(Chunk chunk, byte maxHeight)
+		private static void DrawChunkBoundary(Chunk chunk, Vector3 terrainPosition, byte maxHeight)
 		{
-			var center = new Vector3(chunk.Position.x + chunk.Bounds.Size.x / 2, maxHeight / 2f,
-				chunk.Position.y + chunk.Bounds.Size.y / 2);
+			var center = terrainPosition + new Vector3(chunk.Bounds.Center.x, maxHeight / 2f,
+				chunk.Bounds.Center.y);
 			var size = new Vector3(chunk.Bounds.Size.x, maxHeight, chunk.Bounds.Size.y);
 
 			Gizmos.DrawWireCube(center, size);

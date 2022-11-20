@@ -13,11 +13,9 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 
 		public IntBounds Bounds { get; }
 		public Bounds SubMeshBounds { get; }
-		public int2 Position { get; }
 
-		public Chunk(int2 position, IntBounds bounds, byte maxHeight)
+		public Chunk(IntBounds bounds, byte maxHeight)
 		{
-			Position = position;
 			Bounds = bounds;
 			SubMeshBounds = GetSubMeshBounds(maxHeight);
 		}
@@ -29,7 +27,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 
 		private Bounds GetSubMeshBounds(byte maxHeight) =>
 			new(
-				new(Position.x + Bounds.Center.x, (float) maxHeight / 2, Position.y + Bounds.Center.y),
+				new(Bounds.Center.x, (float) maxHeight / 2, Bounds.Center.y),
 				new(Bounds.Size.x, maxHeight, Bounds.Size.y)
 			);
 

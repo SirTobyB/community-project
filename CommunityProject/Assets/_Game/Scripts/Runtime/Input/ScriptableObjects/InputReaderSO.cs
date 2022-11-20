@@ -1,5 +1,3 @@
-using System;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,8 +6,19 @@ namespace BoundfoxStudios.CommunityProject.Input.ScriptableObjects
 	[CreateAssetMenu(menuName = Constants.MenuNames.Input + "/Input Reader")]
 	public class InputReaderSO : ScriptableObject, GameInput.IGameplayActions
 	{
-		public delegate void ClickEventHandler(Vector2 position);
-		public event ClickEventHandler Click = delegate { };
+		public delegate void SelectEventHandler(Vector2 position);
+
+		/// <summary>
+		/// Raised when the player performs a selection, e.g. clicking with the mouse button.
+		/// </summary>
+		public event SelectEventHandler Select = delegate { };
+
+		public delegate void PositionEventHandler(Vector2 position);
+
+		/// <summary>
+		/// Raised when the player moves his pointing device, e.g. moving the mouse.
+		/// </summary>
+		public event PositionEventHandler Position = delegate {  };
 
 		private GameInput _gameInput;
 
@@ -46,14 +55,24 @@ namespace BoundfoxStudios.CommunityProject.Input.ScriptableObjects
 			_gameInput.UI.Enable();
 		}
 
-		public void OnClick(InputAction.CallbackContext context)
+		public void OnSelect(InputAction.CallbackContext context)
 		{
 			if (!context.performed)
 			{
 				return;
 			}
 
-			Click(context.ReadValue<Vector2>());
+			Select(context.ReadValue<Vector2>());
+		}
+
+		public void OnPointerPosition(InputAction.CallbackContext context)
+		{
+			if (!context.performed)
+			{
+				return;
+			}
+
+			Position(context.ReadValue<Vector2>());
 		}
 	}
 }

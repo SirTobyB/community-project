@@ -4,6 +4,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {
 	public struct IntBounds
 	{
+		public static IntBounds Invalid => new(new(-1), new(-1));
+
 		private readonly int2 _min;
 		private readonly int2 _max;
 
@@ -12,12 +14,14 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 		public int2 Size { get; }
 		public int2 Center { get; }
 
+		public bool IsValid => math.all(Min >= 0) && math.all(Max >= 0);
+
 		public IntBounds(int2 min, int2 max)
 		{
 			_min = min;
 			_max = max;
 			Size = max - min;
-			Center = Size / 2;
+			Center = min + Size / 2;
 		}
 
 		/*

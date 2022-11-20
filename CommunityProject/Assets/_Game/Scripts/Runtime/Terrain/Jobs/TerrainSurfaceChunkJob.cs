@@ -15,9 +15,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 		public Grid Grid;
 
 		[ReadOnly]
-		public int2 Position;
-
-		[ReadOnly]
 		public IntBounds Bounds;
 
 		[ReadOnly]
@@ -28,11 +25,11 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 
 		public void Execute()
 		{
-			for (var x = 0; x < Bounds.Size.x; x++)
+			for (var x = Bounds.Min.x; x < Bounds.Max.x; x++)
 			{
-				for (var z = 0; z < Bounds.Size.y; z++)
+				for (var z = Bounds.Min.y; z < Bounds.Max.y; z++)
 				{
-					var position = new int2(Position.x + x, Position.y + z);
+					var position = new int2(x, z);
 
 					var tile = Grid.GetTile(position);
 

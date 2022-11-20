@@ -19,6 +19,9 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 		[ReadOnly]
 		public Bounds Bounds;
 
+		[ReadOnly]
+		public float3 VertexOffset;
+
 		private const int VerticesPerTriangle = 3;
 
 		[StructLayout(LayoutKind.Sequential)]
@@ -167,7 +170,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 
 			var streamVertex = new StreamVertex
 			{
-				Position = vertex.Position,
+				Position = vertex.Position + VertexOffset,
 				Normal = vertex.Normal,
 				TexCoord0 = vertex.TexCoord0
 			};

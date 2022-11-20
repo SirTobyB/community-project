@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BoundfoxStudios.CommunityProject.Terrain.Chunks;
+using BoundfoxStudios.CommunityProject.Terrain.ScriptableObjects;
 using Unity.Collections;
 using UnityEngine;
 using Grid = BoundfoxStudios.CommunityProject.Terrain.Tiles.Grid;
@@ -25,6 +26,9 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 		private Grid _grid;
 		internal ChunkList ChunkList;
+
+		[field: SerializeField]
+		public TileTypesSO TileTypes { get; private set; }
 
 		[field: SerializeField]
 		[field: Range(5, 15)]

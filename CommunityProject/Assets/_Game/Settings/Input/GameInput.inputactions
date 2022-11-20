@@ -6,13 +6,22 @@
             "id": "a364189b-7ccc-4ede-a56e-3f9935c00534",
             "actions": [
                 {
-                    "name": "Click",
+                    "name": "Select",
                     "type": "Button",
                     "id": "3449a04b-2444-4d8f-9d63-ee77b940e99a",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "PointerPosition",
+                    "type": "Value",
+                    "id": "8e9c2291-1cd7-443a-9544-91dffc19dd2c",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -23,7 +32,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Click",
+                    "action": "Select",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -34,7 +43,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
-                    "action": "Click",
+                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -45,9 +54,20 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard & Mouse",
-                    "action": "Click",
+                    "action": "Select",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "cedc751d-054a-4540-b63f-54208ca4e49f",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & Mouse",
+                    "action": "PointerPosition",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
