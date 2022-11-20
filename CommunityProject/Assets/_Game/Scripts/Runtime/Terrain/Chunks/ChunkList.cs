@@ -6,19 +6,18 @@ using Unity.Mathematics;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 {
-	// TODO: Refactor to not inherit from List<Chunk>
 	public class ChunkList : IEnumerable<Chunk>
 	{
 		private readonly List<Chunk> _chunks = new();
 
 		public ReadOnlyCollection<Chunk> Chunks => new(_chunks);
 
-		public ChunkList(int2 gridSize, int chunkSize)
+		public ChunkList(int2 gridSize, int chunkSize, byte maxHeight)
 		{
-			GenerateChunks(gridSize, chunkSize);
+			GenerateChunks(gridSize, chunkSize, maxHeight);
 		}
 
-		private void GenerateChunks(int2 gridSize, int chunkSize)
+		private void GenerateChunks(int2 gridSize, int chunkSize, byte maxHeight)
 		{
 			var worldBounds = new IntBounds(new(0), gridSize);
 			var chunkBounds = new IntBounds(0, chunkSize);
@@ -33,7 +32,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 				{
 					var position = new int2(x * chunkSize, z * chunkSize);
 
-					_chunks.Add(new(position, chunkBounds));
+					_chunks.Add(new(position, chunkBounds, maxHeight));
 				}
 			}
 		}

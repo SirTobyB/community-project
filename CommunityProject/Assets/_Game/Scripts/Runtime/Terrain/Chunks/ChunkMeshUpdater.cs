@@ -8,28 +8,26 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 	{
 		private readonly Mesh _surfaceMesh;
 		private readonly Mesh _wallMesh;
+		private readonly Bounds _subMeshBounds;
 
 		private readonly Mesh.MeshDataArray _meshDataArray;
 
 		public Mesh.MeshData SurfaceMeshData => _meshDataArray[0];
 		public Mesh.MeshData WallMeshData => _meshDataArray[1];
 
-		public ChunkMeshUpdater(Mesh surfaceMesh, Mesh wallMesh)
+		public ChunkMeshUpdater(Mesh surfaceMesh, Mesh wallMesh, Bounds subMeshBounds)
 		{
 			_surfaceMesh = surfaceMesh;
 			_wallMesh = wallMesh;
+			_subMeshBounds = subMeshBounds;
 
 			_meshDataArray = Mesh.AllocateWritableMeshData(2);
 		}
 
 		public void Dispose()
 		{
-			// TODO: Directly accessing first data and first submesh may not be a good idea
-			var bounds = SurfaceMeshData.GetSubMesh(0).bounds;
-			_surfaceMesh.bounds = bounds;
-
-			bounds = WallMeshData.GetSubMesh(0).bounds;
-			_wallMesh.bounds = bounds;
+			_surfaceMesh.bounds = _subMeshBounds;
+			_wallMesh.bounds = _subMeshBounds;
 
 			Mesh.ApplyAndDisposeWritableMeshData(_meshDataArray, new[] { _surfaceMesh, _wallMesh },
 				MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices);

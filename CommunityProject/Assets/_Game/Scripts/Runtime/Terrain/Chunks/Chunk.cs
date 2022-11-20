@@ -7,27 +7,27 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 {
 	public class Chunk
 	{
-		private readonly Mesh _surfaceMesh = new();
-		private readonly Mesh _wallMesh = new();
+		internal Mesh SurfaceMesh { get; } = new();
 
-		internal Mesh SurfaceMesh => _surfaceMesh;
-		internal Mesh WallMesh => _wallMesh;
+		internal Mesh WallMesh { get; } = new();
 
 		public IntBounds Bounds { get; }
+		public Bounds SubMeshBounds { get; }
 		public int2 Position { get; }
 
-		public Chunk(int2 position, IntBounds bounds)
+		public Chunk(int2 position, IntBounds bounds, byte maxHeight)
 		{
 			Position = position;
 			Bounds = bounds;
+			SubMeshBounds = GetSubMeshBounds(maxHeight);
 		}
 
 		public ChunkMeshUpdater AcquireMeshUpdater()
 		{
-			return new(_surfaceMesh, _wallMesh);
+			return new(SurfaceMesh, WallMesh, SubMeshBounds);
 		}
 
-		public Bounds GetSubMeshBounds(byte maxHeight) =>
+		private Bounds GetSubMeshBounds(byte maxHeight) =>
 			new(
 				new(Position.x + Bounds.Center.x, (float) maxHeight / 2, Position.y + Bounds.Center.y),
 				new(Bounds.Size.x, maxHeight, Bounds.Size.y)
@@ -35,14 +35,14 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
 
 		public void Render(Matrix4x4 matrix, TileTypesSO tileTypes, int layer)
 		{
-			for (var i = 0; i < _surfaceMesh.subMeshCount; i++)
+			for (var i = 0; i < SurfaceMesh.subMeshCount; i++)
 			{
-				Graphics.DrawMesh(_surfaceMesh, matrix, tileTypes.ById((byte)i).SurfaceMaterial, layer, null, i);
+				Graphics.DrawMesh(SurfaceMesh, matrix, tileTypes.ById((byte)i).SurfaceMaterial, layer, null, i);
 			}
 
-			for (var i = 0; i < _wallMesh.subMeshCount; i++)
+			for (var i = 0; i < WallMesh.subMeshCount; i++)
 			{
-				Graphics.DrawMesh(_wallMesh, matrix, tileTypes.ById((byte)i).WallMaterial, layer, null, i);
+				Graphics.DrawMesh(WallMesh, matrix, tileTypes.ById((byte)i).WallMaterial, layer, null, i);
 			}
 
 		}

@@ -141,8 +141,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 				_surfaceMeshUpdateData = new(TileTypeCount, Allocator.Persistent);
 				_wallMeshUpdateData = new(TileTypeCount, Allocator.Persistent);
 
-				var surfaceUpdateJobHandle = ScheduleSurfaceUpdate();
-				var wallUpdateJobHandle = ScheduleWallUpdate();
+				var surfaceUpdateJobHandle = ScheduleSurfaceUpdate(Chunk.SubMeshBounds);
+				var wallUpdateJobHandle = ScheduleWallUpdate(Chunk.SubMeshBounds);
 
 				_jobHandle = JobHandle.CombineDependencies(
 					surfaceUpdateJobHandle,
@@ -150,7 +150,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 				);
 			}
 
-			private JobHandle ScheduleSurfaceUpdate()
+			private JobHandle ScheduleSurfaceUpdate(Bounds bounds)
 			{
 				var surfaceChunkJob = new TerrainSurfaceChunkJob()
 				{
@@ -176,7 +176,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 				var meshWriteJob = new WriteChunkMeshJob()
 				{
-					Bounds = Chunk.GetSubMeshBounds(MaxHeight),
+					Bounds = bounds,
 					MeshData = _meshUpdater.SurfaceMeshData,
 					MeshUpdateData = _surfaceMeshUpdateData
 				};
@@ -184,7 +184,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 				return meshWriteJob.Schedule(combineNormalsJobHandle);
 			}
 
-			private JobHandle ScheduleWallUpdate()
+			private JobHandle ScheduleWallUpdate(Bounds bounds)
 			{
 				var wallChunkJob = new TerrainWallChunkJob()
 				{
@@ -204,7 +204,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 				var meshWriteJob = new WriteChunkMeshJob()
 				{
-					Bounds = Chunk.GetSubMeshBounds(MaxHeight),
+					Bounds = bounds,
 					MeshData = _meshUpdater.WallMeshData,
 					MeshUpdateData = _wallMeshUpdateData
 				};

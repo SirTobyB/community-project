@@ -41,7 +41,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		private void Awake()
 		{
 			_grid = new(Width, Length, MaxHeight, Allocator.Persistent);
-			ChunkList = new(new(Width, Length), ChunkSize);
+			ChunkList = new(new(Width, Length), ChunkSize, MaxHeight);
 		}
 
 		private void Start()
