@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace BoundfoxStudios.CommunityProject.Terrain
+namespace BoundfoxStudios.CommunityProject.Terrain.Diagnostics
 {
 	[AddComponentMenu(Constants.MenuNames.Terrain + "/" + nameof(TerrainDebugger))]
 	public class TerrainDebugger : MonoBehaviour

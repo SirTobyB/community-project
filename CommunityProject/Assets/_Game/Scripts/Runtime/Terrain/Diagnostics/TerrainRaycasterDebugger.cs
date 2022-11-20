@@ -1,7 +1,7 @@
 using BoundfoxStudios.CommunityProject.Input.ScriptableObjects;
 using UnityEngine;
 
-namespace BoundfoxStudios.CommunityProject.Terrain
+namespace BoundfoxStudios.CommunityProject.Terrain.Diagnostics
 {
 	[AddComponentMenu(Constants.MenuNames.Terrain + "/" + nameof(TerrainRaycasterDebugger))]
 	public class TerrainRaycasterDebugger : MonoBehaviour
@@ -39,7 +39,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 			if (Raycaster.Raycast(ray, out var hitInfo, MaxRaycastDistance, TerrainLayerMask))
 			{
-				Debug.Log($"Tile Position {hitInfo.TilePosition}");
+				Debug.Log($"Tile Position {hitInfo.Tile.Position}");
 				return;
 			}
 

@@ -1,5 +1,6 @@
 using BoundfoxStudios.CommunityProject.Terrain;
 using BoundfoxStudios.CommunityProject.Terrain.Chunks;
+using BoundfoxStudios.CommunityProject.Terrain.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 
