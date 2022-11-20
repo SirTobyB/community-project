@@ -1,9 +1,9 @@
-using Unity.Mathematics;
+using BoundfoxStudios.CommunityProject.Terrain.Tiles;
 
 namespace BoundfoxStudios.CommunityProject.Terrain
 {
 	public struct TerrainRaycastHit
 	{
-		public int2 TilePosition { get; set; }
+		public Tile Tile { get; set; }
 	}
 }

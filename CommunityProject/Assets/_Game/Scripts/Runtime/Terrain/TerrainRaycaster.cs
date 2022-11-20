@@ -5,7 +5,6 @@ using Grid = BoundfoxStudios.CommunityProject.Terrain.Tiles.Grid;
 namespace BoundfoxStudios.CommunityProject.Terrain
 {
 	[AddComponentMenu(Constants.MenuNames.Terrain + "/" + nameof(TerrainRaycaster))]
-	[RequireComponent(typeof(TerrainCollider))]
 	public class TerrainRaycaster : MonoBehaviour
 	{
 		public bool Raycast(Ray ray, out TerrainRaycastHit terrainRaycastHit, float maxRaycastDistance, LayerMask layerMask)
@@ -17,16 +16,17 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 				return false;
 			}
 
-			if (!hitInfo.collider.TryGetComponentInParent<TerrainCollider>(out var terrainCollider))
+			if (!hitInfo.collider.TryGetComponentInParent<Terrain>(out var terrain))
 			{
 				return false;
 			}
 
-			var tilePosition = Grid.WorldToTilePosition(hitInfo.point - terrainCollider.transform.position);
+			var tilePosition = Grid.WorldToTilePosition(hitInfo.point - terrain.transform.position);
+			var tile = terrain.Grid.GetTile(tilePosition);
 
 			terrainRaycastHit = new()
 			{
-				TilePosition = tilePosition
+				Tile = tile,
 			};
 
 			return true;
