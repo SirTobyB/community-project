@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
@@ -17,7 +18,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 		public int2 Position { get; }
 		public float3 BottomCenter { get; }
 
-		public float Center => GetCenter(GetData());
+		public float CenterHeight => GetCenterHeight(GetData());
 
 		public Tile(Grid grid, int2 position)
 		{
@@ -28,7 +29,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 
 		internal readonly TileData GetData() => _grid.GetTileData(Position);
 
-		internal float GetCenter(TileData data)
+		internal float GetCenterHeight(TileData data)
 		{
 			var lowestPoint = data.GetLowestPoint();
 			float center = lowestPoint;

@@ -24,7 +24,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tools
 			}
 		}
 
-		public void UpdateMesh(Terrain terrain, IntBounds bounds)
+		public void UpdateMesh(Terrain terrain, IntBounds bounds, Directions? triangleDirection = null)
 		{
 			var meshDataArray = Mesh.AllocateWritableMeshData(1);
 			var meshData = meshDataArray[0];
@@ -35,7 +35,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tools
 				Bounds = bounds,
 				Grid = terrain.Grid,
 				HeightStep = terrain.HeightStep,
-				MeshUpdateData = meshUpdateData
+				MeshUpdateData = meshUpdateData,
+				SingleTriangle = triangleDirection
 			};
 			var surfaceJobHandle = surfaceJob.Schedule();
 

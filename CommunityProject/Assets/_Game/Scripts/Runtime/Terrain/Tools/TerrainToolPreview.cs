@@ -37,7 +37,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tools
 				return;
 			}
 
-			_previewMesh.UpdateMesh(selection.Terrain, selection.Bounds);
+			_previewMesh.UpdateMesh(selection.Terrain, selection.Bounds, selection.Triangle);
 		}
 
 		private void LateUpdate()

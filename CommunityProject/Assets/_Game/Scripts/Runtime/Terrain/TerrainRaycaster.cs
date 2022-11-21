@@ -19,9 +19,13 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		[SerializeField]
 		private InputReaderSO InputReader;
 
+		[SerializeField]
+		private bool DEBUG_USE_TRIANGLE_SELECTION_MODE;
+
 		private TerrainSelection _selection;
 
 		public delegate void SelectionChangeEventHandler(TerrainSelection selection);
+
 		public event SelectionChangeEventHandler SelectionChange = delegate { };
 
 		private void OnEnable()
@@ -31,7 +35,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			// TODO: Remove, only for testing
 			InputReader.EnableGameplayInput();
 		}
-
 
 		private void OnDisable()
 		{
@@ -46,8 +49,19 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		private void UpdateSelection(Vector2 position)
 		{
 			var ray = Camera.ScreenPointToRay(position);
+			TerrainRaycastHit hitInfo = new();
 
-			if (!TerrainRaycasterUtils.Raycast(ray, out var hitInfo, MaxRaycastDistance, TerrainLayerMask))
+			if ((DEBUG_USE_TRIANGLE_SELECTION_MODE &&
+			     !TerrainRaycasterUtils.RaycastTileTriangle(ray, out hitInfo, MaxRaycastDistance, TerrainLayerMask))
+			    || (!DEBUG_USE_TRIANGLE_SELECTION_MODE && !TerrainRaycasterUtils.RaycastTile(ray, out hitInfo, MaxRaycastDistance, TerrainLayerMask))
+			   )
+			{
+				_selection.Clear();
+				OnSelectionChange();
+				return;
+			}
+
+			if (hitInfo.IsWall)
 			{
 				_selection.Clear();
 				OnSelectionChange();
@@ -55,8 +69,15 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			}
 
 			// TODO: Later, we can use the selected bounds to select more than one tile
+
 			_selection.Terrain = hitInfo.Terrain;
 			_selection.Bounds = new(hitInfo.Tile.Position, hitInfo.Tile.Position + 1);
+
+			if (DEBUG_USE_TRIANGLE_SELECTION_MODE)
+			{
+				_selection.Triangle = hitInfo.TriangleDirection;
+			}
+
 			OnSelectionChange();
 		}
 

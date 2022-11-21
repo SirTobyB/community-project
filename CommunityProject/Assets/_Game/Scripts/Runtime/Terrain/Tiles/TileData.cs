@@ -101,5 +101,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 			Directions.West => _westTriangleTileTypeId,
 			_ => throw new ArgumentOutOfRangeException(nameof(direction), "Invalid direction")
 		};
+
 	}
 }

@@ -35,7 +35,7 @@ namespace BoundfoxStudios.CommunityProject.Tests.Editor.Terrain
 			)
 		{
 			var sut = new Tile(default, new(0, 0));
-			var result = sut.GetCenter(new(northWest, northEast, southEast, southWest));
+			var result = sut.GetCenterHeight(new(northWest, northEast, southEast, southWest));
 
 			result.Should().BeApproximately(expectedResult, 0.0001f);
 		}
