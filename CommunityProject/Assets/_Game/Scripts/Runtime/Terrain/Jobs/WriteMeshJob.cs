@@ -8,6 +8,9 @@ using UnityEngine.Rendering;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
+	/// <summary>
+	/// This jobs writes <see cref="MeshUpdateData"/> into a mesh's vertex and index buffer streams.
+	/// </summary>
 	[BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
 	public struct WriteMeshJob : IJob
 	{
@@ -24,6 +27,10 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 
 		private const int VerticesPerTriangle = 3;
 
+		/// <remarks>
+		/// Do NOT change the order of the members, they map directly to the vertex buffer stream layout.
+		/// If you need to change something here, make sure that you change the code in <see cref="WriteMeshJob.Initialize"/> as well.
+		/// </remarks>
 		[StructLayout(LayoutKind.Sequential)]
 		private struct StreamVertex
 		{

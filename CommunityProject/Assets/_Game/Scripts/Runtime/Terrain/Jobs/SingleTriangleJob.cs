@@ -5,10 +5,13 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine.Android;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
+	/// <summary>
+	///   This jobs generates a mesh for a single triangle.
+	///   Only useful for tool previews that can operate on a single triangle.
+	/// </summary>
 	[BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
 	public struct SingleTriangleJob : IJob
 	{

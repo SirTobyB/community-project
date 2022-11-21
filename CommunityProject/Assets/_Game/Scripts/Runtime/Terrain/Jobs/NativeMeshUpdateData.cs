@@ -3,7 +3,10 @@ using Unity.Collections;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
-	public struct NativeMeshUpdateData : IDisposable
+	/// <summary>
+	///   Data structure to hold all data that is used to generate the terrain mesh.
+	/// </summary>
+	public readonly struct NativeMeshUpdateData : IDisposable
 	{
 		public NativeList<Triangle> Triangles { get; }
 		public NativeList<Vertex> Vertices { get; }

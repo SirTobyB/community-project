@@ -7,6 +7,9 @@ using Unity.Mathematics;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
+	/// <summary>
+	///   This jobs generates the surface of a chunk.
+	/// </summary>
 	[BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
 	public struct TerrainSurfaceChunkJob : IJob
 	{

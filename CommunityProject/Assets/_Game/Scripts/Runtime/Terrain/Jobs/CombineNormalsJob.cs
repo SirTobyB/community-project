@@ -1,10 +1,19 @@
+using System;
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;
 using Unity.Jobs;
 using Unity.Mathematics;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
+	/// <summary>
+	///   This job averages the normals within <see cref="SurfaceMeshUpdateData" />.
+	///   Before, the normals of a <see cref="Vertex" /> point in a certain direction calculated by
+	///   <see cref="NormalCalculationJob" />.
+	///   However, this leads to very hard terrain edges when the terrain is raised.
+	///   Therefore, this jobs averages the normals to create a smoother terrain.
+	/// </summary>
 	[BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
 	public struct CombineNormalsJob : IJob
 	{
@@ -19,19 +28,18 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 		public void Execute()
 		{
 			var vertices = SurfaceMeshUpdateData.Vertices;
-			// TODO: Nested List must be unsafe list
-			var bucket = new NativeHashMap<float3, NativeList<PositionedVertex>>(0, Allocator.Temp);
+			var positionMap = new NativeHashMap<float3, UnsafeList<PositionedVertex>>(0, Allocator.Temp);
 
 			for (var index = 0; index < vertices.Length; index++)
 			{
 				var vertex = vertices[index];
-				if (!bucket.ContainsKey(vertex.Position))
+				if (!positionMap.ContainsKey(vertex.Position))
 				{
-					var list = new NativeList<PositionedVertex>(Allocator.Temp);
-					bucket.Add(vertex.Position, list);
+					var list = new UnsafeList<PositionedVertex>(1, Allocator.Temp);
+					positionMap.Add(vertex.Position, list);
 				}
 
-				var vertexList = bucket[vertex.Position];
+				var vertexList = positionMap[vertex.Position];
 				vertexList.Add(new()
 				{
 					Index = index,
@@ -39,7 +47,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 				});
 			}
 
-			foreach (var kvp in bucket)
+			foreach (var kvp in positionMap)
 			{
 				var list = kvp.Value;
 
@@ -68,7 +76,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			}
 
 
-			bucket.Dispose();
+			positionMap.Dispose();
 		}
 	}
 }

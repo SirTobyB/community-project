@@ -2,6 +2,9 @@ using Unity.Mathematics;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
+	/// <summary>
+	/// Data structure to describe vertex.
+	/// </summary>
 	public struct Vertex
 	{
 		public float3 Position;

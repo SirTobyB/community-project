@@ -6,6 +6,9 @@ using Unity.Mathematics;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
+	/// <summary>
+	///   This job generates walls for a chunk.
+	/// </summary>
 	[BurstCompile(FloatPrecision.Standard, FloatMode.Fast, CompileSynchronously = true)]
 	public struct TerrainWallChunkJob : IJob
 	{

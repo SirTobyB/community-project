@@ -1,5 +1,8 @@
 namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 {
+	/// <summary>
+	/// Data structure to describe a triangle.
+	/// </summary>
 	public struct Triangle
 	{
 		public int VertexIndex1 { get; }
