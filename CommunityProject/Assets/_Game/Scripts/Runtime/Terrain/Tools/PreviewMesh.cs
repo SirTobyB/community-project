@@ -30,15 +30,31 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tools
 			var meshData = meshDataArray[0];
 			var meshUpdateData = new NativeMeshUpdateData(terrain.TileTypes.Length, Allocator.TempJob);
 
-			var surfaceJob = new TerrainSurfaceChunkJob()
+			JobHandle surfaceJobHandle;
+
+			if (triangleDirection is null)
 			{
-				Bounds = bounds,
-				Grid = terrain.Grid,
-				HeightStep = terrain.HeightStep,
-				MeshUpdateData = meshUpdateData,
-				SingleTriangle = triangleDirection
-			};
-			var surfaceJobHandle = surfaceJob.Schedule();
+				var surfaceJob = new TerrainSurfaceChunkJob()
+				{
+					Bounds = bounds,
+					Grid = terrain.Grid,
+					HeightStep = terrain.HeightStep,
+					MeshUpdateData = meshUpdateData,
+				};
+				surfaceJobHandle = surfaceJob.Schedule();
+			}
+			else
+			{
+				var singleTriangleJob = new SingleTriangleJob()
+				{
+					Grid = terrain.Grid,
+					Position = bounds.Center,
+					HeightStep = terrain.HeightStep,
+					MeshUpdateData = meshUpdateData,
+					TriangleDirection = new(triangleDirection.Value)
+				};
+				surfaceJobHandle = singleTriangleJob.Schedule();
+			}
 
 			var normalCalculationJob = new NormalCalculationJob()
 			{

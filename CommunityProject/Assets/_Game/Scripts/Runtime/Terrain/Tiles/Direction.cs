@@ -23,20 +23,12 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 			new(-1, 0)  // West
 		};
 
-		private Direction(byte index)
-		{
-			if (index > 3)
-			{
-				throw new ArgumentOutOfRangeException(nameof(index), "Must be 0-3");
-			}
+		public Direction(Directions direction) => Index = (byte)direction;
 
-			Index = index;
-		}
-
-		public static Direction North => new(0);
-		public static Direction East => new(1);
-		public static Direction South => new(2);
-		public static Direction West => new(3);
+		public static Direction North => new(Directions.North);
+		public static Direction East => new(Directions.East);
+		public static Direction South => new(Directions.South);
+		public static Direction West => new(Directions.West);
 
 		public int2 ToVector() => Vectors[Index];
 	}

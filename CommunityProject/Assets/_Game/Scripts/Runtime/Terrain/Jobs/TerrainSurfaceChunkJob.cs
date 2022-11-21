@@ -22,9 +22,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 		[ReadOnly]
 		public float HeightStep;
 
-		[ReadOnly]
-		public Directions? SingleTriangle; // TODO: We may should remove this here into its own job?
-
 		public void Execute()
 		{
 			for (var x = Bounds.Min.x; x < Bounds.Max.x; x++)
@@ -64,22 +61,22 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 
 			// Vertex: North West
 			vertex.Position = cornerNorthWest;
-			vertex.TexCoord0 = new(0, 1);
+			vertex.TexCoord0 = Corner.NorthWest.TexCoord0;
 			MeshUpdateData.Vertices.Add(vertex);
 
 			// Vertex: North East
 			vertex.Position = cornerNorthEast;
-			vertex.TexCoord0 = new(1, 1);
+			vertex.TexCoord0 = Corner.NorthEast.TexCoord0;
 			MeshUpdateData.Vertices.Add(vertex);
 
 			// Vertex: South East
 			vertex.Position = cornerSouthEast;
-			vertex.TexCoord0 = new(1, 0);
+			vertex.TexCoord0 = Corner.SouthEast.TexCoord0;
 			MeshUpdateData.Vertices.Add(vertex);
 
 			// Vertex: South West
 			vertex.Position = cornerSouthWest;
-			vertex.TexCoord0 = new(0, 0);
+			vertex.TexCoord0 = Corner.SouthWest.TexCoord0;
 			MeshUpdateData.Vertices.Add(vertex);
 
 			var northTileType = tile.GetTileType(Direction.North);
@@ -87,27 +84,10 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			var southTileType = tile.GetTileType(Direction.South);
 			var westTileType = tile.GetTileType(Direction.West);
 
-			switch (SingleTriangle)
-			{
-				case Directions.North:
-					MeshUpdateData.Triangles.Add(new(northTileType, centerVertexIndex, northWestVertexIndex, northEastVertexIndex));
-					break;
-				case Directions.East:
-					MeshUpdateData.Triangles.Add(new(eastTileType, centerVertexIndex, northEastVertexIndex, southEastVertexIndex));
-					break;
-				case Directions.South:
-					MeshUpdateData.Triangles.Add(new(southTileType, centerVertexIndex, southEastVertexIndex, southWestVertexIndex));
-					break;
-				case Directions.West:
-					MeshUpdateData.Triangles.Add(new(westTileType, centerVertexIndex, southWestVertexIndex, northWestVertexIndex));
-					break;
-				default:
-					MeshUpdateData.Triangles.Add(new(northTileType, centerVertexIndex, northWestVertexIndex, northEastVertexIndex));
-					MeshUpdateData.Triangles.Add(new(eastTileType, centerVertexIndex, northEastVertexIndex, southEastVertexIndex));
-					MeshUpdateData.Triangles.Add(new(southTileType, centerVertexIndex, southEastVertexIndex, southWestVertexIndex));
-					MeshUpdateData.Triangles.Add(new(westTileType, centerVertexIndex, southWestVertexIndex, northWestVertexIndex));
-					break;
-			}
+			MeshUpdateData.Triangles.Add(new(northTileType, centerVertexIndex, northWestVertexIndex, northEastVertexIndex));
+			MeshUpdateData.Triangles.Add(new(eastTileType, centerVertexIndex, northEastVertexIndex, southEastVertexIndex));
+			MeshUpdateData.Triangles.Add(new(southTileType, centerVertexIndex, southEastVertexIndex, southWestVertexIndex));
+			MeshUpdateData.Triangles.Add(new(westTileType, centerVertexIndex, southWestVertexIndex, northWestVertexIndex));
 		}
 	}
 }
