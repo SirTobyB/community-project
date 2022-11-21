@@ -1,4 +1,3 @@
-using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Collections.LowLevel.Unsafe;
@@ -19,62 +18,54 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 	{
 		public NativeMeshUpdateData SurfaceMeshUpdateData;
 
-		private struct PositionedVertex
+		private struct CombinedNormalIndicesList
 		{
-			public Vertex Vertex;
-			public int Index;
+			public UnsafeList<int> Indices;
+			public float3 CombinedNormal;
 		}
 
 		public void Execute()
 		{
 			var vertices = SurfaceMeshUpdateData.Vertices;
-			var positionMap = new NativeHashMap<float3, UnsafeList<PositionedVertex>>(0, Allocator.Temp);
+			var positionMap = new NativeHashMap<float3, CombinedNormalIndicesList>(0, Allocator.Temp);
 
 			for (var index = 0; index < vertices.Length; index++)
 			{
 				var vertex = vertices[index];
 				if (!positionMap.ContainsKey(vertex.Position))
 				{
-					var list = new UnsafeList<PositionedVertex>(1, Allocator.Temp);
-					positionMap.Add(vertex.Position, list);
+					positionMap.Add(vertex.Position, new()
+					{
+						Indices = new(1, Allocator.Temp)
+					});
 				}
 
-				var vertexList = positionMap[vertex.Position];
-				vertexList.Add(new()
-				{
-					Index = index,
-					Vertex = vertex
-				});
+				var normalVertexList = positionMap[vertex.Position];
+				normalVertexList.CombinedNormal += vertex.Normal;
+				normalVertexList.Indices.Add(index);
+				positionMap[vertex.Position] = normalVertexList;
 			}
 
 			foreach (var kvp in positionMap)
 			{
-				var list = kvp.Value;
+				var normalVertexList = kvp.Value;
+				var indices = normalVertexList.Indices;
 
-				if (list.Length == 1)
+				if (indices.Length == 1)
 				{
-					vertices[list[0].Index] = list[0].Vertex;
 					continue;
 				}
 
-				var combinedNormal = float3.zero;
-
-				foreach (var item in list)
+				foreach (var index in indices)
 				{
-					combinedNormal += item.Vertex.Normal;
+					var vertex = vertices[index];
+					vertex.Normal = math.normalize(normalVertexList.CombinedNormal / indices.Length);
+
+					vertices[index] = vertex;
 				}
 
-				foreach (var item in list)
-				{
-					var vertex = item.Vertex;
-					vertex.Normal = math.normalize(combinedNormal / list.Length);
-
-					vertices[item.Index] = vertex;
-				}
-
-				list.Dispose();
+				indices.Dispose();
 			}
-
 
 			positionMap.Dispose();
 		}
