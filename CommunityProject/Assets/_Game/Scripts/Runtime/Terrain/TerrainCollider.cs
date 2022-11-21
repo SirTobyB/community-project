@@ -48,10 +48,10 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		{
 			var position = chunk.Bounds.Center;
 
-			if (!_colliders.TryGetValue(position, out var meshColllider))
+			if (!_colliders.TryGetValue(position, out var meshCollider))
 			{
-				meshColllider = _internalCollidersGameObject.AddComponent<MeshCollider>();
-				_colliders.Add(position, meshColllider);
+				meshCollider = _internalCollidersGameObject.AddComponent<MeshCollider>();
+				_colliders.Add(position, meshCollider);
 			}
 
 			var mesh = new Mesh();
@@ -61,7 +61,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 					.ToArray(),
 				true, true, false);
 
-			meshColllider.sharedMesh = mesh;
+			meshCollider.sharedMesh = mesh;
 		}
 
 		private CombineInstance[] CreateCombineInstances(Mesh mesh)

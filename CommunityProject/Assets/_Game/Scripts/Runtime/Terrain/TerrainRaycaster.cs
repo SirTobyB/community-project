@@ -22,9 +22,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		[SerializeField]
 		private bool DEBUG_USE_TRIANGLE_SELECTION_MODE;
 
-		private TerrainSelection _selection;
-
-		public delegate void SelectionChangeEventHandler(TerrainSelection selection);
+		public delegate void SelectionChangeEventHandler(TerrainSelection? possibleSelection);
 
 		public event SelectionChangeEventHandler SelectionChange = delegate { };
 
@@ -56,31 +54,27 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 			    || (!DEBUG_USE_TRIANGLE_SELECTION_MODE && !TerrainRaycasterUtils.RaycastTile(ray, out hitInfo, MaxRaycastDistance, TerrainLayerMask))
 			   )
 			{
-				_selection.Clear();
-				OnSelectionChange();
+				OnSelectionChange(null);
 				return;
 			}
 
 			if (hitInfo.IsWall)
 			{
-				_selection.Clear();
-				OnSelectionChange();
+				OnSelectionChange(null);
 				return;
 			}
 
-			// TODO: Later, we can use the selected bounds to select more than one tile
-
-			_selection.Terrain = hitInfo.Terrain;
-			_selection.Bounds = new(hitInfo.Tile.Position, hitInfo.Tile.Position + 1);
-
-			if (DEBUG_USE_TRIANGLE_SELECTION_MODE)
+			var selection = new TerrainSelection()
 			{
-				_selection.Triangle = hitInfo.TriangleDirection;
-			}
+				Terrain = hitInfo.Terrain,
+			// TODO: Later, we can use the selected bounds to select more than one tile
+				Bounds = new(hitInfo.Tile.Position, hitInfo.Tile.Position + 1),
+				Triangle = hitInfo.TriangleDirection
+			};
 
-			OnSelectionChange();
+			OnSelectionChange(selection);
 		}
 
-		private void OnSelectionChange() => SelectionChange(_selection);
+		private void OnSelectionChange(TerrainSelection? possibleSelection) => SelectionChange(possibleSelection);
 	}
 }

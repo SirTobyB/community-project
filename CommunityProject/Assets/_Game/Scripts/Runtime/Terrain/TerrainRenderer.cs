@@ -15,8 +15,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 	public class TerrainRenderer : MonoBehaviour
 	{
 		private readonly List<Chunk> _chunkCache = new();
-
 		private readonly List<Chunk> _chunksToUpdate = new();
+
 		private bool _hasUpdated;
 		private Terrain _terrain;
 

@@ -28,14 +28,16 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tools
 			Raycaster.SelectionChange -= UpdatePreviewPosition;
 		}
 
-		private void UpdatePreviewPosition(TerrainSelection selection)
+		private void UpdatePreviewPosition(TerrainSelection? possibleSelection)
 		{
 			_previewMesh.Clear();
 
-			if (!selection.HasSelection)
+			if (possibleSelection is null)
 			{
 				return;
 			}
+
+			var selection = possibleSelection.Value;
 
 			_previewMesh.UpdateMesh(selection.Terrain, selection.Bounds, selection.Triangle);
 		}

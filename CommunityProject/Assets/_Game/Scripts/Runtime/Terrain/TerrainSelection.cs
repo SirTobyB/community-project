@@ -8,13 +8,5 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		public Terrain Terrain { get; set; }
 
 		public CardinalDirection? Triangle { get; set; }
-		public bool HasSelection => Terrain && Bounds.IsValid;
-
-		public void Clear()
-		{
-			Bounds = IntBounds.Invalid;
-			Terrain = null;
-			Triangle = null;
-		}
 	}
 }
