@@ -19,6 +19,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 		public void Execute()
 		{
 			var vertices = SurfaceMeshUpdateData.Vertices;
+			// TODO: Nested List must be unsafe list
 			var bucket = new NativeHashMap<float3, NativeList<PositionedVertex>>(0, Allocator.Temp);
 
 			for (var index = 0; index < vertices.Length; index++)

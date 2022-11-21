@@ -1,4 +1,3 @@
-using System;
 using BoundfoxStudios.CommunityProject.Terrain.Jobs.Calculations;
 using BoundfoxStudios.CommunityProject.Terrain.Tiles;
 using Unity.Burst;

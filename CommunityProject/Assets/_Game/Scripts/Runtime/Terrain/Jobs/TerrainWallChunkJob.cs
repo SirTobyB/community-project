@@ -58,7 +58,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 			var isNeighborInBounds = neighbor.IsInBounds;
 			var needsTriangle1 = !isNeighborInBounds || neighbor.GetHeight(neighborLeft) < tileData.GetHeight(corner);
 			var needsTriangle2 = !isNeighborInBounds
-								 || neighbor.GetHeight(neighborRight) < tileData.GetHeight(corner.NeighborClockwise);
+			                     || neighbor.GetHeight(neighborRight) < tileData.GetHeight(corner.NeighborClockwise);
 
 			if (!needsTriangle1 && !needsTriangle2)
 			{
@@ -75,8 +75,9 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 				AddNewVertexToVertices(ref tile, corner.NeighborClockwise, new(0, 1));
 				AddNewVertexToVertices(ref tile, corner, new(1, 1));
 				AddNewVertexToVertices(ref neighbor, neighborLeft, new(1, 0));
-				MeshUpdateData.Triangles.Add(new (tileType, vertexIndex, vertexIndex + 1, vertexIndex + 2));
+				MeshUpdateData.Triangles.Add(new(tileType, vertexIndex, vertexIndex + 1, vertexIndex + 2));
 			}
+
 			if (needsTriangle2)
 			{
 				var vertexIndex = MeshUpdateData.Vertices.Length;
@@ -90,8 +91,9 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 				{
 					AddNewVertexToVertices(ref tile, corner, new(1, 1));
 				}
+
 				AddNewVertexToVertices(ref neighbor, neighborRight, new(0, 0));
-				MeshUpdateData.Triangles.Add(new (tileType, vertexIndex, vertexIndex +1, vertexIndex + 2));
+				MeshUpdateData.Triangles.Add(new(tileType, vertexIndex, vertexIndex + 1, vertexIndex + 2));
 			}
 		}
 
