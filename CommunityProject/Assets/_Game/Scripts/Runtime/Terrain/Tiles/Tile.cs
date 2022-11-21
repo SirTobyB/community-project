@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Tiles

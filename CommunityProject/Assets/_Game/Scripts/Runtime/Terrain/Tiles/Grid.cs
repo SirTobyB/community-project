@@ -1,7 +1,6 @@
 using System;
 using Unity.Collections;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {

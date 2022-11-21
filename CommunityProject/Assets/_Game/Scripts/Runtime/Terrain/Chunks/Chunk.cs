@@ -1,6 +1,5 @@
 using BoundfoxStudios.CommunityProject.Terrain.ScriptableObjects;
 using BoundfoxStudios.CommunityProject.Terrain.Tiles;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Chunks
