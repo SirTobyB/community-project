@@ -1,7 +1,7 @@
 using BoundfoxStudios.CommunityProject.Terrain.Tiles;
 using Unity.Mathematics;
 
-namespace BoundfoxStudios.CommunityProject.Terrain
+namespace BoundfoxStudios.CommunityProject.Terrain.Utils
 {
 	public struct TerrainRaycastHit
 	{
