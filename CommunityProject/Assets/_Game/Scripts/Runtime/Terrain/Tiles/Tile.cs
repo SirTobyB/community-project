@@ -50,7 +50,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 
 		public Tile GetNeighbor(Direction direction)
 		{
-			var offset = direction.ToVector();
+			var offset = direction.Vector;
 			var neighborPosition = Position + offset;
 
 			if (!_grid.IsInBounds(neighborPosition))

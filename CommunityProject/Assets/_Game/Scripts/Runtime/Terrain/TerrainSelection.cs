@@ -7,7 +7,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		public IntBounds Bounds { get; set; }
 		public Terrain Terrain { get; set; }
 
-		public Directions? Triangle { get; set; }
+		public CardinalDirection? Triangle { get; set; }
 		public bool HasSelection => Terrain && Bounds.IsValid;
 
 		public void Clear()

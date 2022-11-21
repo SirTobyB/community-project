@@ -18,8 +18,9 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		/// <summary>
 		/// The actual triangle in the tile that was hit.
 		/// </summary>
-		public Directions? TriangleDirection { get; set; }
+		public CardinalDirection? TriangleDirection { get; set; }
 
+		// TODO: Check if this calculation is enough to know if we hit a wall or not
 		public bool IsWall => math.distance(math.dot(Normal, math.up()), 0) < float.Epsilon;
 		public float3 Normal { get; set; }
 	}

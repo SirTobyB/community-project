@@ -24,7 +24,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tools
 			}
 		}
 
-		public void UpdateMesh(Terrain terrain, IntBounds bounds, Directions? triangleDirection = null)
+		public void UpdateMesh(Terrain terrain, IntBounds bounds, CardinalDirection? triangleDirection = null)
 		{
 			var meshDataArray = Mesh.AllocateWritableMeshData(1);
 			var meshData = meshDataArray[0];

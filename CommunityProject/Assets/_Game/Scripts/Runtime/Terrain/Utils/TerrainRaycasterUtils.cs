@@ -56,29 +56,31 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Utils
 			var center = terrainRaycastHit.Tile.BottomCenter +
 			             new float3(0, terrainRaycastHit.Tile.CenterHeight * terrainRaycastHit.Terrain.HeightStep, 0);
 
-			var hitsNorthTriangle = TriangleIntersection(ray, center, northWestCorner, northEastCorner);
-			var hitsEastTriangle = TriangleIntersection(ray, center, northEastCorner, southEastCorner);
-			var hitsSouthTriangle = TriangleIntersection(ray, center, southEastCorner, southWestCorner);
-			var hitsWestTriangle = TriangleIntersection(ray, center, southWestCorner, northWestCorner);
+			var origin = new float3(ray.origin);
+			var direction = new float3(ray.direction);
+			var hitsNorthTriangle = TriangleIntersection(origin, direction, center, northWestCorner, northEastCorner);
+			var hitsEastTriangle = TriangleIntersection(origin, direction, center, northEastCorner, southEastCorner);
+			var hitsSouthTriangle = TriangleIntersection(origin, direction, center, southEastCorner, southWestCorner);
+			var hitsWestTriangle = TriangleIntersection(origin, direction, center, southWestCorner, northWestCorner);
 
 			if (hitsNorthTriangle)
 			{
-				terrainRaycastHit.TriangleDirection = Directions.North;
+				terrainRaycastHit.TriangleDirection = CardinalDirection.North;
 			}
 
 			if (hitsEastTriangle)
 			{
-				terrainRaycastHit.TriangleDirection = Directions.East;
+				terrainRaycastHit.TriangleDirection = CardinalDirection.East;
 			}
 
 			if (hitsSouthTriangle)
 			{
-				terrainRaycastHit.TriangleDirection = Directions.South;
+				terrainRaycastHit.TriangleDirection = CardinalDirection.South;
 			}
 
 			if (hitsWestTriangle)
 			{
-				terrainRaycastHit.TriangleDirection = Directions.West;
+				terrainRaycastHit.TriangleDirection = CardinalDirection.West;
 			}
 
 			return true;
@@ -91,11 +93,8 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Utils
 		/// We're using the Option 1 optimization, that can be found here: https://fileadmin.cs.lth.se/cs/Personal/Tomas_Akenine-Moller/raytri/raytri.c
 		/// Look for method "intersect_triangle1".
 		/// </summary>
-		private static bool TriangleIntersection(Ray ray, float3 p1, float3 p2, float3 p3)
+		private static bool TriangleIntersection(float3 origin, float3 direction, float3 p1, float3 p2, float3 p3)
 		{
-			var origin = new float3(ray.origin);
-			var direction = new float3(ray.direction);
-
 			var edge1 = p2 - p1;
 			var edge2 = p3 - p1;
 

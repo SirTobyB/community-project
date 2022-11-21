@@ -7,12 +7,12 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 	{
 		internal byte Index { get; }
 
-		public Directions ABC => Index switch
+		public CardinalDirection CardinalDirection => Index switch
 		{
-			0 => Directions.North,
-			1 => Directions.East,
-			2 => Directions.South,
-			3 => Directions.West,
+			0 => CardinalDirection.North,
+			1 => CardinalDirection.East,
+			2 => CardinalDirection.South,
+			3 => CardinalDirection.West,
 			_ => throw new ArgumentOutOfRangeException(nameof(Index), $"{nameof(Index)} can only be in range 0-3")
 		};
 
@@ -23,13 +23,13 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 			new(-1, 0)  // West
 		};
 
-		public Direction(Directions direction) => Index = (byte)direction;
+		public Direction(CardinalDirection cardinalDirection) => Index = (byte)cardinalDirection;
 
-		public static Direction North => new(Directions.North);
-		public static Direction East => new(Directions.East);
-		public static Direction South => new(Directions.South);
-		public static Direction West => new(Directions.West);
+		public static Direction North => new(CardinalDirection.North);
+		public static Direction East => new(CardinalDirection.East);
+		public static Direction South => new(CardinalDirection.South);
+		public static Direction West => new(CardinalDirection.West);
 
-		public int2 ToVector() => Vectors[Index];
+		public int2 Vector => Vectors[Index];
 	}
 }

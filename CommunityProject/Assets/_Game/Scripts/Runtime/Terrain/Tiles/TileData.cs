@@ -52,10 +52,10 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 
 		public byte GetHeight(Corner corner) => corner.Direction switch
 		{
-			Corners.NorthWest => _cornerNorthWestHeight,
-			Corners.NorthEast => _cornerNorthEastHeight,
-			Corners.SouthEast => _cornerSouthEastHeight,
-			Corners.SouthWest => _cornerSouthWestHeight,
+			CornerDirection.NorthWest => _cornerNorthWestHeight,
+			CornerDirection.NorthEast => _cornerNorthEastHeight,
+			CornerDirection.SouthEast => _cornerSouthEastHeight,
+			CornerDirection.SouthWest => _cornerSouthWestHeight,
 			_ => throw new ArgumentOutOfRangeException(nameof(corner), "No valid corner direction")
 		};
 
@@ -93,14 +93,13 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 			return count;
 		}
 
-		public byte GetTileType(Direction direction) => direction.ABC switch
+		public byte GetTileType(Direction direction) => direction.CardinalDirection switch
 		{
-			Directions.North => _northTriangleTileTypeId,
-			Directions.East => _eastTriangleTileTypeId,
-			Directions.South => _southTriangleTileTypeId,
-			Directions.West => _westTriangleTileTypeId,
+			CardinalDirection.North => _northTriangleTileTypeId,
+			CardinalDirection.East => _eastTriangleTileTypeId,
+			CardinalDirection.South => _southTriangleTileTypeId,
+			CardinalDirection.West => _westTriangleTileTypeId,
 			_ => throw new ArgumentOutOfRangeException(nameof(direction), "Invalid direction")
 		};
-
 	}
 }

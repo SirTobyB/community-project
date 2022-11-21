@@ -33,12 +33,12 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Jobs
 		{
 			var tile = Grid.GetTile(Position);
 
-			var firstCorner = TriangleDirection.ABC switch
+			var firstCorner = TriangleDirection.CardinalDirection switch
 			{
-				Directions.North => Corner.NorthWest,
-				Directions.East => Corner.NorthEast,
-				Directions.South => Corner.SouthEast,
-				Directions.West => Corner.SouthWest,
+				CardinalDirection.North => Corner.NorthWest,
+				CardinalDirection.East => Corner.NorthEast,
+				CardinalDirection.South => Corner.SouthEast,
+				CardinalDirection.West => Corner.SouthWest,
 				_ => throw new ArgumentOutOfRangeException(nameof(TriangleDirection))
 			};
 

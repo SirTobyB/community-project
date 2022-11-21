@@ -1,6 +1,6 @@
 namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {
-	public enum Corners : byte
+	public enum CornerDirection : byte
 	{
 		NorthWest,
 		NorthEast,

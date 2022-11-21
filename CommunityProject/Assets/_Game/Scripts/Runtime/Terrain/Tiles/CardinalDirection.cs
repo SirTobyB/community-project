@@ -1,6 +1,6 @@
 namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {
-	public enum Directions : byte
+	public enum CardinalDirection : byte
 	{
 		North,
 		East,
