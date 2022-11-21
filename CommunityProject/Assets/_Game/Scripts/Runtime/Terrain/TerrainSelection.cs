@@ -1,12 +1,80 @@
-using BoundfoxStudios.CommunityProject.Terrain.Tiles;
+using BoundfoxStudios.CommunityProject.Input.ScriptableObjects;
+using BoundfoxStudios.CommunityProject.Terrain.Utils;
+using UnityEngine;
 
 namespace BoundfoxStudios.CommunityProject.Terrain
 {
-	public struct TerrainSelection
+	[AddComponentMenu(Constants.MenuNames.Terrain + "/" + nameof(TerrainSelection))]
+	public class TerrainSelection : MonoBehaviour
 	{
-		public IntBounds Bounds { get; set; }
-		public Terrain Terrain { get; set; }
+		[SerializeField]
+		private Camera Camera;
 
-		public CardinalDirection? Triangle { get; set; }
+		[SerializeField]
+		private LayerMask TerrainLayerMask;
+
+		[SerializeField]
+		private float MaxRaycastDistance = 10;
+
+		[SerializeField]
+		private InputReaderSO InputReader;
+
+		[SerializeField]
+		private bool DEBUG_USE_TRIANGLE_SELECTION_MODE;
+
+		public delegate void SelectionChangeEventHandler(Selection? possibleSelection);
+
+		public event SelectionChangeEventHandler Change = delegate { };
+
+		private void OnEnable()
+		{
+			InputReader.Position += ReadPosition;
+
+			// TODO: Remove, only for testing
+			InputReader.EnableGameplayInput();
+		}
+
+		private void OnDisable()
+		{
+			InputReader.Position -= ReadPosition;
+		}
+
+		private void ReadPosition(Vector2 position)
+		{
+			UpdateSelection(position);
+		}
+
+		private void UpdateSelection(Vector2 position)
+		{
+			var ray = Camera.ScreenPointToRay(position);
+			TerrainRaycastHit hitInfo = new();
+
+			if ((DEBUG_USE_TRIANGLE_SELECTION_MODE &&
+			     !TerrainRaycasterUtils.RaycastTileTriangle(ray, out hitInfo, MaxRaycastDistance, TerrainLayerMask))
+			    || (!DEBUG_USE_TRIANGLE_SELECTION_MODE && !TerrainRaycasterUtils.RaycastTile(ray, out hitInfo, MaxRaycastDistance, TerrainLayerMask))
+			   )
+			{
+				OnChange(null);
+				return;
+			}
+
+			if (hitInfo.IsWall)
+			{
+				OnChange(null);
+				return;
+			}
+
+			var selection = new Selection()
+			{
+				Terrain = hitInfo.Terrain,
+			// TODO: Later, we can use the selected bounds to select more than one tile
+				Bounds = new(hitInfo.Tile.Position, hitInfo.Tile.Position + 1),
+				Triangle = hitInfo.TriangleDirection
+			};
+
+			OnChange(selection);
+		}
+
+		private void OnChange(Selection? possibleSelection) => Change(possibleSelection);
 	}
 }

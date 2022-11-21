@@ -561,7 +561,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c64ad37b824ce8a9a83f7df235b0f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Raycaster: {fileID: 2033435515}
+  Selection: {fileID: 2033435515}
   PreviewMaterial: {fileID: 2100000, guid: df6d1e5cf47e94e6cb5283f212ffbdf7, type: 2}
 --- !u!1 &2033435514
 GameObject:
@@ -574,7 +574,7 @@ GameObject:
   - component: {fileID: 2033435516}
   - component: {fileID: 2033435515}
   m_Layer: 0
-  m_Name: TerrainRaycaster
+  m_Name: TerrainSelection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -598,6 +598,7 @@ MonoBehaviour:
     m_Bits: 1
   MaxRaycastDistance: 60
   InputReader: {fileID: 11400000, guid: 8b87fd4ff750d2348b3a6c6654e1c0fe, type: 2}
+  DEBUG_USE_TRIANGLE_SELECTION_MODE: 0
 --- !u!4 &2033435516
 Transform:
   m_ObjectHideFlags: 0

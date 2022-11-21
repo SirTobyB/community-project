@@ -6,7 +6,7 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tools
 	public class TerrainToolPreview : MonoBehaviour
 	{
 		[SerializeField]
-		private TerrainRaycaster Raycaster;
+		private TerrainSelection Selection;
 
 		[SerializeField]
 		private Material PreviewMaterial;
@@ -20,15 +20,15 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tools
 
 		private void OnEnable()
 		{
-			Raycaster.SelectionChange += UpdatePreviewPosition;
+			Selection.Change += UpdatePreviewPosition;
 		}
 
 		private void OnDisable()
 		{
-			Raycaster.SelectionChange -= UpdatePreviewPosition;
+			Selection.Change -= UpdatePreviewPosition;
 		}
 
-		private void UpdatePreviewPosition(TerrainSelection? possibleSelection)
+		private void UpdatePreviewPosition(Selection? possibleSelection)
 		{
 			_previewMesh.Clear();
 
