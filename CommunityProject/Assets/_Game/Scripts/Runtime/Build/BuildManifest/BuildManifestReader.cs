@@ -1,4 +1,6 @@
+using BoundfoxStudios.CommunityProject.Infrastructure.FileManagement;
 using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -14,7 +16,7 @@ namespace BoundfoxStudios.CommunityProject.Build.BuildManifest
 		public async UniTask<BuildManifest> LoadAsync()
 		{
 			var textAsset = await Addressables.LoadAssetAsync<TextAsset>(BuildManifestAddressablesKey);
-			var buildManifest = JsonUtility.FromJson<BuildManifest>(textAsset.text);
+			var buildManifest = JsonConvert.DeserializeObject<BuildManifest>(textAsset.text, JsonFileManager.DefaultSerializerSettings);
 
 			return buildManifest;
 		}

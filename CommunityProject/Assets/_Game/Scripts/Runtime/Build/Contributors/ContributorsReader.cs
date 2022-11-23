@@ -1,4 +1,7 @@
+using System;
+using BoundfoxStudios.CommunityProject.Infrastructure.FileManagement;
 using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -14,9 +17,9 @@ namespace BoundfoxStudios.CommunityProject.Build.Contributors
 		public async UniTask<Contributor[]> LoadAsync()
 		{
 			var textAsset = await Addressables.LoadAssetAsync<TextAsset>(ContributorsAddressablesKey);
-			var contributors = JsonUtility.FromJson<Contributors>(textAsset.text);
+			var contributors = JsonConvert.DeserializeObject<Contributors>(textAsset.text, JsonFileManager.DefaultSerializerSettings);
 
-			return contributors.Items;
+			return contributors != null ? contributors.Items : Array.Empty<Contributor>();
 		}
 	}
 }

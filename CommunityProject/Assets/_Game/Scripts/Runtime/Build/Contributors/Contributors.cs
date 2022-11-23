@@ -1,18 +1,19 @@
-using System;
-using UnityEngine;
+using Newtonsoft.Json;
 
 namespace BoundfoxStudios.CommunityProject.Build.Contributors
 {
 	/// <summary>
 	/// This class abstracts the manifest.json file.
 	/// </summary>
-	[Serializable]
+	[JsonObject]
 	public class Contributors
 	{
-		[SerializeField]
-		// ReSharper disable once InconsistentNaming
-		private Contributor[] items = Array.Empty<Contributor>();
+		public Contributor[] Items { get; private set; }
 
-		public Contributor[] Items => items;
+		[JsonConstructor]
+		public Contributors(Contributor[] items)
+		{
+			Items = items;
+		}
 	}
 }

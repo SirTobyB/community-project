@@ -1,37 +1,19 @@
-using System;
-using UnityEngine;
+using Newtonsoft.Json;
 
 namespace BoundfoxStudios.CommunityProject.Build.Contributors
 {
-	[Serializable]
+	[JsonObject]
 	public class Contributor
 	{
-		[SerializeField]
-		// ReSharper disable once InconsistentNaming
-		private string user;
-
-		[SerializeField]
-		// ReSharper disable once InconsistentNaming
-		private string githubAccount;
-
-		[SerializeField]
-		// ReSharper disable once InconsistentNaming
-		private string profileUrl;
-
-		[SerializeField]
-		// ReSharper disable once InconsistentNaming
-		private string[] contributions;
-
-
 		/// <summary>
 		/// Username as set in the GitHub profile information
 		/// </summary>
-		public string User => user;
+		public string User { get; private set; }
 
 		/// <summary>
 		/// The contributor's GitHub account name
 		/// </summary>
-		public string GitHubAccount => githubAccount;
+		public string GitHubAccount { get; private set; }
 
 		/// <summary>
 		/// Full URL to the contributors GitHub profile
@@ -43,6 +25,14 @@ namespace BoundfoxStudios.CommunityProject.Build.Contributors
 		/// Item will be a string of the AllContributors bot: https://allcontributors.org/docs/en/emoji-key
 		/// e.g. "audio", "code", "doc", ...
 		/// </summary>
-		public string[] Contributions => contributions;
+		public string[] Contributions { get; private set; }
+
+		[JsonConstructor]
+		public Contributor(string user, string gitHubAccount, string[] contributions)
+		{
+			User = user;
+			GitHubAccount = gitHubAccount;
+			Contributions = contributions;
+		}
 	}
 }

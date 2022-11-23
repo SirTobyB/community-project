@@ -1,5 +1,7 @@
 using System.IO;
 using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 namespace BoundfoxStudios.CommunityProject.Infrastructure.FileManagement
@@ -7,6 +9,11 @@ namespace BoundfoxStudios.CommunityProject.Infrastructure.FileManagement
 	public class JsonFileManager : IFileManager
 	{
 		private readonly string _rootPath = Application.persistentDataPath;
+		public static JsonSerializerSettings DefaultSerializerSettings = new()
+		{
+			Formatting = Formatting.None,
+			ContractResolver = new CamelCasePropertyNamesContractResolver()
+		};
 
 		public UniTask<bool> ExistsAsync(string key)
 		{
@@ -17,7 +24,7 @@ namespace BoundfoxStudios.CommunityProject.Infrastructure.FileManagement
 
 		public async UniTask WriteAsync<T>(string key, T serializable)
 		{
-			var jsonSerialization = JsonUtility.ToJson(serializable);
+			var jsonSerialization = JsonConvert.SerializeObject(serializable, DefaultSerializerSettings);
 
 			var path = CreateFilePath(key);
 			EnsurePath(path);
@@ -29,7 +36,7 @@ namespace BoundfoxStudios.CommunityProject.Infrastructure.FileManagement
 		{
 			var jsonFromFile = await File.ReadAllTextAsync(CreateFilePath(key));
 
-			return JsonUtility.FromJson<T>(jsonFromFile);
+			return JsonConvert.DeserializeObject<T>(jsonFromFile, DefaultSerializerSettings);
 		}
 
 		private string CreateFilePath(string key)
