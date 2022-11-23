@@ -1,12 +1,11 @@
-using BoundfoxStudios.CommunityProject.Terrain;
 using BoundfoxStudios.CommunityProject.Terrain.Chunks;
 using BoundfoxStudios.CommunityProject.Terrain.Diagnostics;
 using UnityEditor;
 using UnityEngine;
 
-namespace BoundfoxStudios.CommunityProject.Editor.Terrain
+namespace BoundfoxStudios.CommunityProject.Editor.Gizmos.Terrain
 {
-	public static class TerrainGizmos
+	public static class TerrainDebuggerGizmos
 	{
 		[DrawGizmo(GizmoType.Selected, typeof(TerrainDebugger))]
 		private static void DrawChunksGizmos(TerrainDebugger terrainDebugger, GizmoType gizmoType)
@@ -26,7 +25,7 @@ namespace BoundfoxStudios.CommunityProject.Editor.Terrain
 		private static void DrawChunk(Chunk chunk, Vector3 terrainPosition, byte maxHeight,
 			TerrainDebugger.DebuggerOptions options)
 		{
-			Gizmos.color = Color.yellow;
+			UnityEngine.Gizmos.color = Color.yellow;
 
 			if (options.ShowChunkBoundaries)
 			{
@@ -45,7 +44,7 @@ namespace BoundfoxStudios.CommunityProject.Editor.Terrain
 				chunk.Bounds.Center.y);
 			var size = new Vector3(chunk.Bounds.Size.x, maxHeight, chunk.Bounds.Size.y);
 
-			Gizmos.DrawWireCube(center, size);
+			UnityEngine.Gizmos.DrawWireCube(center, size);
 		}
 
 		private static void DrawChunkNormals(Chunk chunk)
@@ -62,11 +61,11 @@ namespace BoundfoxStudios.CommunityProject.Editor.Terrain
 			for (var index = 0; index < normals.Length; index++)
 			{
 				var normal = normals[index];
-				Gizmos.color = Color.yellow;
-				Gizmos.DrawSphere(vertices[index], 0.05f);
+				UnityEngine.Gizmos.color = Color.yellow;
+				UnityEngine.Gizmos.DrawSphere(vertices[index], 0.05f);
 
-				Gizmos.color = Color.red;
-				Gizmos.DrawLine(vertices[index], vertices[index] + normal * 0.5f);
+				UnityEngine.Gizmos.color = Color.red;
+				UnityEngine.Gizmos.DrawLine(vertices[index], vertices[index] + normal * 0.5f);
 			}
 		}
 	}

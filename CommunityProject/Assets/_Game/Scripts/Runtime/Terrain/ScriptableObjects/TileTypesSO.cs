@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BoundfoxStudios.CommunityProject.Terrain.ScriptableObjects
 {
 	[CreateAssetMenu(menuName = Constants.MenuNames.Terrain + "/Tile Types")]
-	public class TileTypesSO : IdentifiableSO
+	public class TileTypesSO : ScriptableObject
 	{
 		public TileTypeSO[] TileTypes;
 

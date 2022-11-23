@@ -33,6 +33,10 @@ MonoBehaviour:
     m_Address: Settings/GameSettings.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 1d5ee6ae2441843a0a26a839375dd9a9
+    m_Address: ScriptableObjects/Terrain
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: fbae45bd11e5d4e3fb4d29e7f0a08824, type: 2}
   m_SchemaSet:

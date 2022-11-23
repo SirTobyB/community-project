@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using BoundfoxStudios.CommunityProject.Infrastructure.SaveManagement;
 using BoundfoxStudios.CommunityProject.Terrain.Chunks;
 using BoundfoxStudios.CommunityProject.Terrain.ScriptableObjects;
+using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
 using Unity.Collections;
 using UnityEngine;
 using Grid = BoundfoxStudios.CommunityProject.Terrain.Tiles.Grid;
@@ -9,7 +12,7 @@ using Grid = BoundfoxStudios.CommunityProject.Terrain.Tiles.Grid;
 namespace BoundfoxStudios.CommunityProject.Terrain
 {
 	[AddComponentMenu(Constants.MenuNames.Terrain + "/" + nameof(Terrain))]
-	public class Terrain : MonoBehaviour
+	public class Terrain : MonoBehaviour, IHaveSaveData<Terrain.DataContainer>
 	{
 		[Header("Settings")]
 		[SerializeField]
@@ -24,7 +27,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		[Min(16)]
 		private int ChunkSize = 16;
 
-		private Grid _grid;
 		internal ChunkList ChunkList;
 
 		[field: SerializeField]
@@ -38,23 +40,24 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		[field: Min(0.5f)]
 		public float HeightStep { get; private set; } = 1;
 
-		public Grid Grid => _grid;
+		public TerrainDataSO TerrainData;
+
+		public Grid Grid { get; private set; }
 
 		private void Awake()
 		{
-			_grid = new(Width, Length, MaxHeight, Allocator.Persistent);
+			Grid = new(Width, Length, MaxHeight, Allocator.Persistent);
 			ChunkList = new(new(Width, Length), ChunkSize, MaxHeight);
 		}
 
 		private void Start()
 		{
-			// TODO: For Testing
 			UpdateChunks(ChunkList.Chunks);
 		}
 
 		private void OnDestroy()
 		{
-			_grid.Dispose();
+			Grid.Dispose();
 		}
 
 		private void OnValidate()
@@ -81,5 +84,28 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 		}
 
 		public event Action<IReadOnlyCollection<Chunk>> UpdateChunks = delegate { };
+
+		public class DataContainer
+		{
+			[JsonProperty("g")]
+			public Grid.DataContainer Grid;
+		}
+
+		public async UniTask<DataContainer> GetDataContainerAsync() => new()
+		{
+			Grid = await Grid.GetDataContainerAsync()
+		};
+
+		public async UniTask SetDataContainerAsync(DataContainer container)
+		{
+			var gridContainer = container.Grid;
+
+			Grid.Dispose();
+			Grid = new(gridContainer.Width, gridContainer.Length, gridContainer.MaxHeight, Allocator.Persistent);
+			await Grid.SetDataContainerAsync(gridContainer);
+
+			ChunkList = new(new(Width, Length), ChunkSize, MaxHeight);
+			UpdateChunks(ChunkList.Chunks);
+		}
 	}
 }

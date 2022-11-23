@@ -1,18 +1,21 @@
 using System;
+using BoundfoxStudios.CommunityProject.Infrastructure.SaveManagement;
+using Cysharp.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 {
-	public struct TileData
+	public struct TileData : IHaveSaveData<TileData.DataContainer>
 	{
-		private readonly byte _cornerNorthWestHeight;
-		private readonly byte _cornerNorthEastHeight;
-		private readonly byte _cornerSouthEastHeight;
-		private readonly byte _cornerSouthWestHeight;
+		private byte _cornerNorthWestHeight;
+		private byte _cornerNorthEastHeight;
+		private byte _cornerSouthEastHeight;
+		private byte _cornerSouthWestHeight;
 
-		private readonly byte _northTriangleTileTypeId;
-		private readonly byte _eastTriangleTileTypeId;
-		private readonly byte _southTriangleTileTypeId;
-		private readonly byte _westTriangleTileTypeId;
+		private byte _northTriangleTileTypeId;
+		private byte _eastTriangleTileTypeId;
+		private byte _southTriangleTileTypeId;
+		private byte _westTriangleTileTypeId;
 
 		public bool IsFlat =>
 			_cornerNorthWestHeight == _cornerNorthEastHeight
@@ -101,5 +104,58 @@ namespace BoundfoxStudios.CommunityProject.Terrain.Tiles
 			CardinalDirection.West => _westTriangleTileTypeId,
 			_ => throw new ArgumentOutOfRangeException(nameof(direction), "Invalid direction")
 		};
+
+		public UniTask<DataContainer> GetDataContainerAsync() => UniTask.FromResult(new DataContainer
+		{
+			CornerNorthWestHeight = _cornerNorthWestHeight,
+			CornerNorthEastHeight = _cornerNorthEastHeight,
+			CornerSouthEastHeight = _cornerSouthEastHeight,
+			CornerSouthWestHeight = _cornerSouthWestHeight,
+			NorthTriangleTileTypeId = _northTriangleTileTypeId,
+			EastTriangleTileTypeId = _eastTriangleTileTypeId,
+			SouthTriangleTileTypeId = _southTriangleTileTypeId,
+			WestTriangleTileTypeId = _westTriangleTileTypeId
+		});
+
+		public UniTask SetDataContainerAsync(DataContainer container)
+		{
+			_cornerNorthWestHeight = container.CornerNorthWestHeight;
+			_cornerNorthEastHeight = container.CornerNorthEastHeight;
+			_cornerSouthEastHeight = container.CornerSouthEastHeight;
+			_cornerSouthWestHeight = container.CornerSouthWestHeight;
+			_northTriangleTileTypeId = container.NorthTriangleTileTypeId;
+			_eastTriangleTileTypeId = container.EastTriangleTileTypeId;
+			_southTriangleTileTypeId = container.SouthTriangleTileTypeId;
+			_westTriangleTileTypeId = container.WestTriangleTileTypeId;
+
+			return UniTask.CompletedTask;
+		}
+
+		public class DataContainer
+		{
+			[JsonProperty("ne")]
+			public byte CornerNorthEastHeight;
+
+			[JsonProperty("nw")]
+			public byte CornerNorthWestHeight;
+
+			[JsonProperty("se")]
+			public byte CornerSouthEastHeight;
+
+			[JsonProperty("sw")]
+			public byte CornerSouthWestHeight;
+
+			[JsonProperty("e")]
+			public byte EastTriangleTileTypeId;
+
+			[JsonProperty("n")]
+			public byte NorthTriangleTileTypeId;
+
+			[JsonProperty("s")]
+			public byte SouthTriangleTileTypeId;
+
+			[JsonProperty("w")]
+			public byte WestTriangleTileTypeId;
+		}
 	}
 }

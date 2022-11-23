@@ -12,12 +12,12 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 {
 	[AddComponentMenu(Constants.MenuNames.Terrain + "/" + nameof(TerrainRenderer))]
 	[RequireComponent(typeof(Terrain))]
+	[ExecuteAlways]
 	public class TerrainRenderer : MonoBehaviour
 	{
 		private readonly List<Chunk> _chunkCache = new();
 		private readonly List<Chunk> _chunksToUpdate = new();
 
-		private bool _hasUpdated;
 		private Terrain _terrain;
 
 		private void Awake()
@@ -61,13 +61,6 @@ namespace BoundfoxStudios.CommunityProject.Terrain
 
 		private void UpdateChunks(List<Chunk> chunksToUpdate)
 		{
-			if (_hasUpdated)
-			{
-				return;
-			}
-
-			_hasUpdated = true;
-
 			Profiler.BeginSample("Updating ChunkList");
 
 			var chunkJobPairs = new List<ChunkJobPair>();
