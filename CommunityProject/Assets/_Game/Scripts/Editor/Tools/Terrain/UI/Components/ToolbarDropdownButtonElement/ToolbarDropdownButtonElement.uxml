@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/_Game/Scripts/Editor/Tools/Terrain/UI/TerrainToolbar.uss?fileID=7433441132597879392&amp;guid=cb67d291d171b4e4c8d2e95c77e06846&amp;type=3#TerrainToolbar" />
+    <ui:VisualElement name="ToolbarDropdownButton" class="terrain-toolbar-button-group" style="flex-direction: column;">
+        <ui:VisualElement name="Top" style="flex-direction: row; flex-grow: 1;">
+            <BoundfoxStudios.CommunityProject.Editor.Tools.Terrain.UI.Components.ToggleButtonElement.ToggleButtonElement name="PrimaryButton" class="terrain-toolbar-button" />
+            <ui:Button display-tooltip-when-elided="true" name="ToggleButton" class="terrain-toolbar-button-dropdown" style="-unity-background-scale-mode: stretch-to-fill; padding-left: 10px; padding-right: 10px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Bottom" style="flex-grow: 1;">
+            <uie:ToolbarSearchField focusable="true" name="SearchField" />
+            <ui:ScrollView name="ItemContainer" class="terrain-toolbar-dropdown-button-item-container" style="flex-grow: 1; max-height: 300px;">
+                <BoundfoxStudios.CommunityProject.Editor.Tools.Terrain.UI.Components.TileTypePreviewElement.TileTypePreviewElement />
+                <BoundfoxStudios.CommunityProject.Editor.Tools.Terrain.UI.Components.TileTypePreviewElement.TileTypePreviewElement />
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

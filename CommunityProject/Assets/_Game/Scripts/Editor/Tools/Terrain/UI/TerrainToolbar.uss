@@ -1,0 +1,43 @@
+.terrain-toolbar-button-group {
+    flex-direction: row;
+}
+
+.terrain-toolbar-button-group .unity-button:hover {
+    background-color: var(--unity-colors-highlight-background-hover-lighter);
+}
+
+.terrain-toolbar-button-dropdown {
+    background-image: url('project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-1304905567622442630&guid=ec88bf31287dc4e309914adf1e2f95c1&type=3#arrow-down@2x');
+}
+
+.terrain-toolbar-button {
+    flex-grow: 1;
+}
+
+.terrain-toolbar-dropdown-button-item-container {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+    justify-content: flex-start;
+}
+
+.terrain-toolbar-dropdown-button-item-container .unity-scroll-view__content-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.toolbar-dropdown-button-element > .tile-type-preview-element {
+    margin-right: 3px;
+}
+
+.tile-type-preview-element:hover {
+    background-color: var(--unity-colors-highlight-background-hover-lighter);
+}
+
+.tile-type-preview-element.is-selected {
+    background-color: var(--unity-colors-highlight-background);
+}
+
+.toggle-button-element.is-selected .unity-button {
+    background-color: var(--unity-colors-highlight-background);
+}

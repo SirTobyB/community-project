@@ -565,3 +565,6 @@ FodyWeavers.xsd
 
 # OSX folder for generated addressable files
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/OSX.meta
+
+# Ignore UIElementsSchema, auto-generated files
+/UIElementsSchema
